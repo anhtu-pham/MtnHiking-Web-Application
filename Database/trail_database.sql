@@ -66,3 +66,31 @@ CREATE TABLE Rate (
     FOREIGN KEY (ticket_id) REFERENCES Hiking_ticket,
     FOREIGN KEY (trail_id) REFERENCES Trail
 )
+
+CREATE TABLE Contains_Special_place (
+    trail_id INT,
+    place_id INT,
+    place_name VARCHAR(20),
+    place_type VARCHAR(20),
+    place_location VARCHAR(20),
+    PRIMARY KEY (trail_id, place_id),
+    FOREIGN KEY (trail_id) REFERENCES Trail
+)
+
+CREATE TABLE Faces_Condition (
+    trail_id INT,
+    condition_id INT,
+    condition_name VARCHAR(20),
+    condition_effect VARCHAR(40),
+    PRIMARY KEY (trail_id, condition_id),
+    FOREIGN KEY (trail_id) REFERENCES Trail
+)
+
+CREATE TABLE Has_Facility (
+    trail_id INT,
+    facility_id INT,
+    facility_name VARCHAR(20),
+    facility_type VARCHAR(20),
+    PRIMARY KEY (trail_id, facility_id),
+    FOREIGN KEY (trail_id) REFERENCES Trail
+)
