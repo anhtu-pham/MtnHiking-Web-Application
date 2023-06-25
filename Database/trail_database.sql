@@ -50,7 +50,7 @@ CREATE TABLE Manages_plan (
     FOREIGN KEY (customer_id) REFERENCES Customer
 )
 
-CREATE TABLE Place (
+CREATE TABLE Occurs_in (
     plan_id INT,
     trail_id INT NOT NULL,
     PRIMARY KEY (plan_id),
