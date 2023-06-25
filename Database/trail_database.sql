@@ -34,3 +34,35 @@ CREATE TABLE Hiking_plan (
     PRIMARY KEY (plan_id)
 )
 
+CREATE TABLE Buys_ticket (
+    ticket_id INT,
+    customer_id INT NOT NULL,
+    PRIMARY KEY (ticket_id),
+    FOREIGN KEY (ticket_id) REFERENCES Hiking_ticket,
+    FOREIGN KEY (customer_id) REFERENCES Customer
+)
+
+CREATE TABLE Manages_plan (
+    plan_id INT,
+    customer_id INT NOT NULL,
+    PRIMARY KEY (plan_id),
+    FOREIGN KEY (plan_id) REFERENCES Hiking_plan,
+    FOREIGN KEY (customer_id) REFERENCES Customer
+)
+
+CREATE TABLE Place (
+    plan_id INT,
+    trail_id INT NOT NULL,
+    PRIMARY KEY (plan_id),
+    FOREIGN KEY (plan_id) REFERENCES Hiking_plan,
+    FOREIGN KEY (trail_id) REFERENCES Trail
+)
+
+CREATE TABLE Rate (
+    ticket_id INT,
+    trail_id INT NOT NULL,
+    ratings INT,
+    PRIMARY KEY (ticket_id),
+    FOREIGN KEY (ticket_id) REFERENCES Hiking_ticket,
+    FOREIGN KEY (trail_id) REFERENCES Trail
+)
