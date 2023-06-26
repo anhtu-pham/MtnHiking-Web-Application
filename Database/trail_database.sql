@@ -1,4 +1,4 @@
-CREATE TABLE Customer (
+CREATE TABLE IF NOT EXISTS Customer (
     customer_id INT,
     customer_name VARCHAR(20),
     age INT,
@@ -9,7 +9,7 @@ CREATE TABLE Customer (
     PRIMARY KEY (customer_id)
 )
 
-CREATE TABLE Hiking_ticket (
+CREATE TABLE IF NOT EXISTS Hiking_ticket (
     ticket_id INT,
     starting_time DATETIME,
     ending_time DATETIME,
@@ -17,7 +17,7 @@ CREATE TABLE Hiking_ticket (
     PRIMARY KEY (ticket_id)
 )
 
-CREATE TABLE Trail (
+CREATE TABLE IF NOT EXISTS Trail (
     trail_id INT,
     trail_name VARCHAR(20),
     trail_location VARCHAR(20),
@@ -27,14 +27,14 @@ CREATE TABLE Trail (
     PRIMARY KEY (trail_id)
 )
 
-CREATE TABLE Hiking_plan (
+CREATE TABLE IF NOT EXISTS Hiking_plan (
     plan_id INT,
     starting_time DATETIME,
     ending_time DATETIME,
     PRIMARY KEY (plan_id)
 )
 
-CREATE TABLE Buys_ticket (
+CREATE TABLE IF NOT EXISTS Buys_ticket (
     ticket_id INT,
     customer_id INT NOT NULL,
     PRIMARY KEY (ticket_id),
@@ -42,7 +42,7 @@ CREATE TABLE Buys_ticket (
     FOREIGN KEY (customer_id) REFERENCES Customer
 )
 
-CREATE TABLE Manages_plan (
+CREATE TABLE IF NOT EXISTS Manages_plan (
     plan_id INT,
     customer_id INT NOT NULL,
     PRIMARY KEY (plan_id),
@@ -50,7 +50,7 @@ CREATE TABLE Manages_plan (
     FOREIGN KEY (customer_id) REFERENCES Customer
 )
 
-CREATE TABLE Occurs_in (
+CREATE TABLE IF NOT EXISTS Occurs_in (
     plan_id INT,
     trail_id INT NOT NULL,
     PRIMARY KEY (plan_id),
@@ -58,7 +58,7 @@ CREATE TABLE Occurs_in (
     FOREIGN KEY (trail_id) REFERENCES Trail
 )
 
-CREATE TABLE Rate (
+CREATE TABLE IF NOT EXISTS Rate (
     ticket_id INT,
     trail_id INT NOT NULL,
     ratings INT,
@@ -67,7 +67,7 @@ CREATE TABLE Rate (
     FOREIGN KEY (trail_id) REFERENCES Trail
 )
 
-CREATE TABLE Contains_Special_place (
+CREATE TABLE IF NOT EXISTS Contains_Special_place (
     trail_id INT,
     place_id INT,
     place_name VARCHAR(20),
@@ -77,7 +77,7 @@ CREATE TABLE Contains_Special_place (
     FOREIGN KEY (trail_id) REFERENCES Trail
 )
 
-CREATE TABLE Faces_Condition (
+CREATE TABLE IF NOT EXISTS Faces_Condition (
     trail_id INT,
     condition_id INT,
     condition_name VARCHAR(20),
@@ -86,7 +86,7 @@ CREATE TABLE Faces_Condition (
     FOREIGN KEY (trail_id) REFERENCES Trail
 )
 
-CREATE TABLE Has_Facility (
+CREATE TABLE IF NOT EXISTS Has_Facility (
     trail_id INT,
     facility_id INT,
     facility_name VARCHAR(20),
