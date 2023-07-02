@@ -9,14 +9,14 @@ CREATE TABLE IF NOT EXISTS User (
     fitness_level INT,
     emergency_contact CHAR(10),
     PRIMARY KEY (user_ID)
-)
+);
 
 CREATE TABLE IF NOT EXISTS Trail_trip (
     trip_ID INT,
     starting_time DATETIME,
     ending_time DATETIME,
     PRIMARY KEY (trip_ID)
-)
+);
 
 CREATE TABLE IF NOT EXISTS Trail (
     trail_ID INT,
@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS Trail (
     exposure VARCHAR(40),
     trail_description VARCHAR(100),
     PRIMARY KEY (trail_ID)
-)
+);
 
 CREATE TABLE IF NOT EXISTS Mountain (
     mountain_ID INT,
@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS Mountain (
     difficulty INT,
     emergency_accessibility VARCHAR(40),
     PRIMARY KEY (mountain_ID)
-)
+);
 
 CREATE TABLE IF NOT EXISTS Goes_on (
     trip_ID INT,
@@ -47,8 +47,7 @@ CREATE TABLE IF NOT EXISTS Goes_on (
     PRIMARY KEY (trip_ID),
     FOREIGN KEY (trip_ID) REFERENCES Trail_trip,
     FOREIGN KEY (user_ID) REFERENCES User
-)
-
+);
 
 CREATE TABLE IF NOT EXISTS Occurs_in (
     trip_ID INT,
@@ -56,7 +55,7 @@ CREATE TABLE IF NOT EXISTS Occurs_in (
     PRIMARY KEY (trip_ID),
     FOREIGN KEY (trip_ID) REFERENCES Trail_trip,
     FOREIGN KEY (trail_ID) REFERENCES Trail
-)
+);
 
 CREATE TABLE IF NOT EXISTS Has_trail (
     trail_ID INT,
@@ -64,7 +63,7 @@ CREATE TABLE IF NOT EXISTS Has_trail (
     PRIMARY KEY (mountain_ID),
     FOREIGN KEY (trail_ID) REFERENCES Trail,
     FOREIGN KEY (mountain_ID) REFERENCES Mountain
-)
+);
 
 CREATE TABLE IF NOT EXISTS Faces_Condition (
     trail_ID INT,
@@ -73,7 +72,7 @@ CREATE TABLE IF NOT EXISTS Faces_Condition (
     condition_rating INT,
     PRIMARY KEY (trail_ID, condition_ID),
     FOREIGN KEY (trail_ID) REFERENCES Trail
-)
+);
 
 CREATE TABLE IF NOT EXISTS Contains_Special_place (
     trail_ID INT,
@@ -83,7 +82,7 @@ CREATE TABLE IF NOT EXISTS Contains_Special_place (
     special_quality VARCHAR(40),
     PRIMARY KEY (trail_ID, place_ID),
     FOREIGN KEY (trail_ID) REFERENCES Trail
-)
+);
 
 CREATE TABLE IF NOT EXISTS Rates_trail (
     user_ID INT,
@@ -92,7 +91,7 @@ CREATE TABLE IF NOT EXISTS Rates_trail (
     PRIMARY KEY (user_ID, trail_ID),
     FOREIGN KEY (user_ID) REFERENCES User,
     FOREIGN KEY (trail_ID) REFERENCES Trail
-)
+);
 
 CREATE TABLE IF NOT EXISTS Connects (
     first_user_ID INT,
@@ -100,7 +99,7 @@ CREATE TABLE IF NOT EXISTS Connects (
     PRIMARY KEY (first_user_ID, second_user_ID),
     FOREIGN KEY (first_user_ID) REFERENCES User,
     FOREIGN KEY (second_user_ID) REFERENCES User
-)
+);
 
 CREATE TABLE IF NOT EXISTS Where_to_hike (
     user_ID INT,
@@ -108,4 +107,4 @@ CREATE TABLE IF NOT EXISTS Where_to_hike (
     PRIMARY KEY (user_ID, mountain_ID),
     FOREIGN KEY (user_ID) REFERENCES User,
     FOREIGN KEY (mountain_ID) REFERENCES Mountain
-)
+);
