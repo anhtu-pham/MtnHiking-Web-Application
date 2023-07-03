@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS Mountain (
 
 CREATE TABLE IF NOT EXISTS Goes_on (
     trip_ID INT,
-    user_ID INT,
+    user_ID INT NOT NULL,
     PRIMARY KEY (trip_ID),
     FOREIGN KEY (trip_ID) REFERENCES Trail_trip,
     FOREIGN KEY (user_ID) REFERENCES User
@@ -51,14 +51,14 @@ CREATE TABLE IF NOT EXISTS Goes_on (
 
 CREATE TABLE IF NOT EXISTS Occurs_in (
     trip_ID INT,
-    trail_ID INT,
+    trail_ID INT NOT NULL,
     PRIMARY KEY (trip_ID),
     FOREIGN KEY (trip_ID) REFERENCES Trail_trip,
     FOREIGN KEY (trail_ID) REFERENCES Trail
 );
 
 CREATE TABLE IF NOT EXISTS Has_trail (
-    trail_ID INT,
+    trail_ID INT NOT NULL,
     mountain_ID INT,
     PRIMARY KEY (mountain_ID),
     FOREIGN KEY (trail_ID) REFERENCES Trail,
