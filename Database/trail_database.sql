@@ -72,6 +72,7 @@ CREATE TABLE IF NOT EXISTS Faces_Condition (
     condition_rating INT,
     PRIMARY KEY (trail_ID, condition_ID),
     FOREIGN KEY (trail_ID) REFERENCES Trail
+    ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS Contains_Special_place (
@@ -82,6 +83,7 @@ CREATE TABLE IF NOT EXISTS Contains_Special_place (
     special_quality VARCHAR(40),
     PRIMARY KEY (trail_ID, place_ID),
     FOREIGN KEY (trail_ID) REFERENCES Trail
+    ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS Rates_trail (
