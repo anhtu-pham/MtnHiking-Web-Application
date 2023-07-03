@@ -58,9 +58,9 @@ CREATE TABLE IF NOT EXISTS Occurs_in (
 );
 
 CREATE TABLE IF NOT EXISTS Has_trail (
-    trail_ID INT NOT NULL,
+    trail_ID INT,
     mountain_ID INT,
-    PRIMARY KEY (mountain_ID),
+    PRIMARY KEY (trail_ID, mountain_ID),
     FOREIGN KEY (trail_ID) REFERENCES Trail,
     FOREIGN KEY (mountain_ID) REFERENCES Mountain
 );
