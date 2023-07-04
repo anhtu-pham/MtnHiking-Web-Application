@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const ejs = require("ejs");
+const database_management = require(__dirname + "/database_management.js");
 
 const app = express();
 
@@ -34,6 +35,16 @@ app.get("/success", function(req, res) {
 });
 app.post("/success", function(req, res) {
     res.redirect("/list");
+});
+
+app.get("/list", function(req, res) {
+    const management = database_management.getInstance();
+    const users = management.getAllUsers();
+    users.then(function(data) {
+        return res.json({data : data});
+    }).catch(function(error) {
+        console.log(error);
+    });
 });
 
 app.listen(3000, function() {

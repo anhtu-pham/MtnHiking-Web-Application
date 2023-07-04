@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS User (
     age INT,
     email VARCHAR(40),
     phone_number CHAR(10),
-    current_location VARCHAR(20),
+    current_location VARCHAR(40),
     fitness_level INT,
     emergency_contact CHAR(10),
     PRIMARY KEY (user_ID)
