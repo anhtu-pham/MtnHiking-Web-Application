@@ -1,7 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const ejs = require("ejs");
-const services = require(__dirname + "/modules/database_management/services.js");
+const services = require(__dirname + "/screens/database_management/services.js");
 
 const app = express();
 
@@ -10,7 +10,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public")); // to use local things of /public folder (not on web)
 
 app.get("/", function(req, res) {
-    res.sendFile(__dirname + "/modules/authentication/signup.html");
+    res.sendFile(__dirname + "/screens/authentication/signup.html");
 });
 
 app.post("/", function(req, res) {
@@ -24,14 +24,14 @@ app.post("/", function(req, res) {
 });
 
 app.get("/failure", function(req, res) {
-    res.sendFile(__dirname + "/modules/authentication/failure.html");
+    res.sendFile(__dirname + "/screens/authentication/failure.html");
 });
 app.post("/failure", function(req, res) {
     res.redirect("/");
 });
 
 app.get("/success", function(req, res) {
-    res.sendFile(__dirname + "/modules/authentication/success.html");
+    res.sendFile(__dirname + "/screens/authentication/success.html");
 });
 app.post("/success", function(req, res) {
     res.redirect("/list");
