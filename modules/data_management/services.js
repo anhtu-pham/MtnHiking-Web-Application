@@ -3,7 +3,7 @@ let dotenv = require("dotenv");
 let instance = null;
 dotenv.config();
 
-let pool = mysql.createPool({
+let connection = mysql.createConnection({
     host: process.env.HOST,
     user: process.env.USER,
     database: process.env.DATABASE,
@@ -26,17 +26,18 @@ let pool = mysql.createPool({
 //     console.log("Successful connection");
 // }
 
-class Management {
+class Services {
     static getInstance() {
-        return instance ? instance : new Management();
+        return instance ? instance : new Services();
     }
 
-    async getUserByID(id) {
+    async getFromTable(table, attributeList) {
         try {
             const response = await new Promise(function(resolve, reject) {
-                const sql = "SELECT * FROM user WHERE user_ID = ?";
-                connection.query(sql, [id], function(error, result, fields) {
+                const sql = 'SELECT ? FROM ' + table;
+                connection.query(sql, [attributeList], function(error, result, fields) {
                     if(error) {
+                        console.log("Cannot retrieve entire data from " + table);
                         reject(new Error(error.message));
                     }
                     resolve(result);
@@ -50,12 +51,13 @@ class Management {
         }
     }
 
-    async getAllUsers() {
+    async getFromTableConditionally(table, attributeList, conditions) {
         try {
-            const response = await new Promise(function(resolve, reject) {
-                const sql = "SELECT * FROM user";
-                connection.query(sql, function(error, result, fields) {
+            const response = await new Promise(function(resolve, reject){
+                let sql = 'SELECT ? FROM ' + table + ' WHERE ?';
+                connection.query(sql, [attributeList, conditions], function(error, result) {
                     if(error) {
+                        console.log("Cannot retrieve data from " + table);
                         reject(new Error(error.message));
                     }
                     resolve(result);
@@ -67,44 +69,30 @@ class Management {
         catch (error) {
             console.log(error);
         }
-    }
-
-    async selectFromTable(table, attributeList) {
-        let attributes = attributeList[0];
-        for (var i = 1; i < attributeList.length; i++) {
-            attributes = attributes.concat(", " + attributeList[i]);
-        }
-        let sql = "SELECT " + attributes + " FROM " + table;
-        connection.query(sql, function(error, result) {
-            if(error) {
-                console.log("Cannot retrieve data from " + table);
-            }
-            console.log(result);
-        });
-    }
-    
-    async selectAllFromTable(table) {
-        let sql = "SELECT * FROM " + table;
-        connection.query(sql, function(error, result) {
-            if(error) {
-                console.log("Cannot retrieve entire data from " + table);
-            }
-            console.log(result);
-        });
     }
 
     async insertIntoTable(table, values) {
-        let sql = "INSERT INTO " + table + " VALUES ?";
-        pool.query(sql, [values], function(error, results, fields) {
-            if(error) {
-                console.log("Cannot add record into " + table);
-                if(table === "User") {
-                    alert("Account cannot be created. Please try again.");
-                }
-            }
-            console.log(result);
-        });
+        try {
+            const response = await new Promise(function(resolve, reject){
+                let sql = 'INSERT INTO ' + table + ' VALUES ?';
+                connection.query(sql, [values], function(error, result) {
+                    if(error) {
+                        console.log("Cannot add record into " + table);
+                        if(table === "user") {
+                            alert("Account cannot be created. Please try again.");
+                        }
+                        reject(new Error(error.message));
+                    }
+                    resolve(result);
+                });
+            });
+            console.log(response);
+            return response;
+        }
+        catch (error) {
+            console.log(error);
+        }
     }
 }
 
-module.exports = Management;
+module.exports = Services;
