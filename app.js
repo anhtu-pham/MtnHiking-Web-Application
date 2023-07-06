@@ -1,7 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const ejs = require("ejs");
-const services = require(__dirname + "/screens/database_management/services.js");
+const services = require(__dirname + "/database_management/services.js");
 
 const app = express();
 
@@ -39,12 +39,17 @@ app.post("/success", function(req, res) {
 
 app.get("/list", function(req, res) {
     const servicesInstance = services.getInstance();
-    const users = servicesInstance.getAllUsers();
+    const users = servicesInstance.select("user", true, null);
     users.then(function(data) {
         return res.json({data : data});
     }).catch(function(error) {
         console.log(error);
     });
+});
+
+app.get("/add", function(req, res) {
+    const servicesInstance = services.getInstance();
+    servicesInstance.insertIntoTable("user", {"first_name" : "A", "last_name" : "B"});
 });
 
 app.listen(3000, function() {
