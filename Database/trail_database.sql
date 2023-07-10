@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS User (
     current_location VARCHAR(40),
     fitness_level INT,
     emergency_contact CHAR(10),
+    code VARCHAR(40),
     PRIMARY KEY (user_ID)
 );
 

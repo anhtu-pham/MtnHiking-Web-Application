@@ -1,4 +1,4 @@
-// let mysql = require("mysql2");
+let mysql = require("mysql2");
 // let dotenv = require("dotenv");
 // dotenv.config();
 
@@ -9,7 +9,7 @@
 //     password: process.env.PASSWORD
 // });
 
-pool = require(__dirname + "/database.js");
+const pool = require(__dirname + "/database.js");
 
 let instance = null;
 
@@ -34,32 +34,18 @@ class Services {
         return instance ? instance : new Services();
     }
 
-    async select(table, isAll, attributeList) {
+    async select(table, isAll, attributes) {
         try {
-            const response = await new Promise(function(resolve, reject) {
-                if(isAll) {
-                    let sql = 'SELECT * FROM ' + table;
-                    pool.query(sql, function(error, result, fields) {
-                        if(error) {
-                            console.log("Cannot retrieve entire data from " + table);
-                            reject(new Error(error.message));
-                        }
-                        resolve(result);
-                    });
-                }
-                else {
-                    let sql = 'SELECT ? FROM ' + table;
-                    pool.query(sql, [attributeList], function(error, result, fields) {
-                        if(error) {
-                            console.log("Cannot retrieve entire data from " + table);
-                            reject(new Error(error.message));
-                        }
-                        resolve(result);
-                    });
-                }
-
+            const response = await new Promise((resolve, reject) => {
+                let sql = isAll ? 'SELECT * FROM ' + table : mysql.format('SELECT ? FROM ' + table, [attributes]);
+                pool.query(sql, (error, results, fields) => {
+                    if(error) {
+                        console.log("Cannot retrieve entire data from " + table);
+                        reject(new Error(error.message));
+                    }
+                    resolve(results);
+                });
             });
-            console.log(response);
             return response;
         }
         catch (error) {
@@ -67,31 +53,18 @@ class Services {
         }
     }
 
-    async selectConditionally(table, isAll, attributeList, conditions) {
+    async selectConditionally(table, isAll, attributes, conditions) {
         try {
-            const response = await new Promise(function(resolve, reject){
-                if(isAll) {
-                    let sql = 'SELECT * FROM ' + table + ' WHERE ?';
-                    pool.query(sql, [conditions], function(error, result) {
-                        if(error) {
-                            console.log("Cannot retrieve data from " + table);
-                            reject(new Error(error.message));
-                        }
-                        resolve(result);
-                    });
-                }
-                else {
-                    let sql = 'SELECT ? FROM ' + table + ' WHERE ?';
-                    pool.query(sql, [attributeList, conditions], function(error, result) {
-                        if(error) {
-                            console.log("Cannot retrieve data from " + table);
-                            reject(new Error(error.message));
-                        }
-                        resolve(result);
-                    });
-                }
+            const response = await new Promise((resolve, reject) => {
+                let sql = isAll ? mysql.format('SELECT * FROM ' + table + ' WHERE ?', [conditions]) : mysql.format('SELECT ? FROM ' + table + ' WHERE ?', [attributes, conditions]);
+                pool.query(sql, (error, results, fields) => {
+                    if(error) {
+                        console.log("Cannot retrieve data from " + table);
+                        reject(new Error(error.message));
+                    }
+                    resolve(results);
+                });
             });
-            console.log(response);
             return response;
         }
         catch (error) {
@@ -101,9 +74,9 @@ class Services {
 
     async insertIntoTable(table, values) {
         try {
-            const response = await new Promise(function(resolve, reject){
-                let sql = 'INSERT INTO ' + table + ' VALUES ?';
-                pool.query(sql, [values], function(error, result) {
+            const response = await new Promise((resolve, reject) => {
+                let sql = 'INSERT INTO ' + table + ' SET ?';
+                pool.query(sql, [values], (error, results, fields) => {
                     if(error) {
                         console.log("Cannot add record into " + table);
                         if(table === "user") {
@@ -111,10 +84,10 @@ class Services {
                         }
                         reject(new Error(error.message));
                     }
-                    resolve(result);
+                    resolve(results);
                 });
             });
-            console.log(response);
+            return response;
         }
         catch (error) {
             console.log(error);

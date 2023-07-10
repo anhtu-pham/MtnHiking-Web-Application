@@ -9,4 +9,4 @@ let pool = mysql.createPool({
     password: process.env.PASSWORD
 });
 
-module.exports = pool.promise();
+module.exports = pool;
