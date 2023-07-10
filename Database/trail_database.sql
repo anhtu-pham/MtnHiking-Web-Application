@@ -3,12 +3,12 @@ CREATE TABLE IF NOT EXISTS User (
     first_name VARCHAR(20),
     last_name VARCHAR(20),
     age INT,
-    email VARCHAR(40),
+    email TEXT,
     phone_number CHAR(10),
-    current_location VARCHAR(40),
+    current_location TEXT,
     fitness_level INT,
     emergency_contact CHAR(10),
-    code VARCHAR(40),
+    code TEXT,
     PRIMARY KEY (user_ID)
 );
 
@@ -25,10 +25,10 @@ CREATE TABLE IF NOT EXISTS Trail (
     elevation_gain REAL,
     difficulty INT,
     trail_length REAL,
-    trail_location VARCHAR(40),
-    water_station VARCHAR(40),
-    exposure VARCHAR(40),
-    trail_description VARCHAR(100),
+    trail_location TEXT,
+    water_station TEXT,
+    exposure TEXT,
+    trail_description TEXT,
     PRIMARY KEY (trail_ID)
 );
 
@@ -38,14 +38,14 @@ CREATE TABLE IF NOT EXISTS Mountain (
     elevation REAL,
     summit_rating INT,
     difficulty INT,
-    emergency_accessibility VARCHAR(40),
+    emergency_accessibility TEXT,
     PRIMARY KEY (mountain_ID)
 );
 
 CREATE TABLE IF NOT EXISTS Goes_on (
     trip_ID INT,
-    user_ID INT NOT NULL,
-    PRIMARY KEY (trip_ID),
+    user_ID INT,
+    PRIMARY KEY (user_ID, trip_ID),
     FOREIGN KEY (trip_ID) REFERENCES Trail_trip,
     FOREIGN KEY (user_ID) REFERENCES User
 );
@@ -81,7 +81,7 @@ CREATE TABLE IF NOT EXISTS Contains_Special_place (
     place_ID INT,
     place_name VARCHAR(20),
     elevation REAL,
-    special_quality VARCHAR(40),
+    special_quality TEXT,
     PRIMARY KEY (trail_ID, place_ID),
     FOREIGN KEY (trail_ID) REFERENCES Trail
     ON DELETE CASCADE
