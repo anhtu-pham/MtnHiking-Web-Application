@@ -65,9 +65,7 @@ app.post("/login", (req, res) => {
     db.serialize(() => {
         user = instance.selectConditionally(db, "User", true, null, ["username = " + username, "password = " + encryptedPassword]);
     });
-    if(user.length > 0) {
-        res.render(secrets);
-    }
+    res.render(secrets);
 });
 
 app.get("/list", (req, res) => {

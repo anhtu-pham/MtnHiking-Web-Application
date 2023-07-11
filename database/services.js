@@ -20,7 +20,10 @@ class Services {
     }
 
     select(db, table, isAll, attributeList) {
-        let attributes = attributeList.join(", ");
+        let attributes = null;
+        if(!isAll) {
+            attributes = attributeList.join(", ");
+        }
         let sql = isAll ? "SELECT * FROM " + table : "SELECT " + attributes + " FROM " + table;
         console.log(sql);
         db.all(sql, (error, rows) => {
@@ -33,7 +36,10 @@ class Services {
     }
 
     selectConditionally(db, table, isAll, attributeList, conditionList) {
-        let attributes = attributeList.join(", ");
+        let attributes = null
+        if(!isAll) {
+            attributes = attributeList.join(", ");
+        }
         let conditions = conditionList.join(" AND ");
         let sql = isAll ? "SELECT * FROM " + table + " WHERE " + conditions : "SELECT " + attributes + " FROM " + table + " WHERE " + conditions;
         console.log(sql);
