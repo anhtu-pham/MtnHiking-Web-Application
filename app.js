@@ -51,17 +51,21 @@ app.post("/signup", (req, res) => {
     }
 });
 
+app.get("/login", (req, res) => {
+    res.render("login");
+});
+
 app.post("/login", (req, res) => {
     let user = null;
     let instance = services.getInstance();
     let username = "\'" + req.body.username + "\'";
-    let encryptedPassword = req.body.password;
-    let decipher = crypto.createDecipheriv(algorithm, crypto.scryptSync(encryptedPassword, 'salt', 24), iv);
-    let password = "\'" + decipher.update(encryptedPassword, 'hex', 'utf8') + "\'";
+    let password = req.body.password;
+    let cipher = crypto.createCipheriv(algorithm, crypto.scryptSync(password, 'salt', 24), iv);
+    let encryptedPassword = cipher.update(password, 'utf8', 'hex') + cipher.final('hex');
     db.serialize(() => {
-        user = instance.selectConditionally(db, "User", true, null, ["username = " + username, "password = " + password]);
+        user = instance.selectConditionally(db, "User", true, null, ["username = " + username, "password = " + encryptedPassword]);
     });
-    if(user) {
+    if(user.length > 0) {
         res.render(secrets);
     }
 });
