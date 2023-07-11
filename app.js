@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 const ejs = require("ejs");
 const sqlite3 = require("sqlite3").verbose();
 const services = require(__dirname + "/database/services.js");
+const crypto = require("crypto");
 
 let db = new sqlite3.Database(__dirname + "/database/mountain_hiking_database.db", (error) => {
     if(error) {
@@ -11,6 +12,9 @@ let db = new sqlite3.Database(__dirname + "/database/mountain_hiking_database.db
     }
     console.log("Successfully connected to the database");
 });
+
+const algorithm = 'aes192';
+const iv = Buffer.alloc(16, 0);
 
 const app = express();
 app.set('view engine', 'ejs');
@@ -23,14 +27,18 @@ app.get("/signup", (req, res) => {
 });
 
 app.post("/signup", (req, res) => {
-    const instance = services.getInstance();
-    const data = req.body;
+    let instance = services.getInstance();
+    let username = req.body.username;
+    let email = req.body.email;
+    let password = req.body.password;
+    let cipher = crypto.createCipheriv(algorithm, crypto.scryptSync(password, 'salt', 24), iv);
+    let encryptedPassword = cipher.update(password, 'utf8', 'hex') + cipher.final('hex');
     db.serialize(() => {
         instance.insert(
             db, 
             "User", 
-            ["first_name", "last_name", "email", "code"], 
-            ["\'" + data.first_name + "\'", "\'" + data.last_name + "\'", "\'" + data.email + "\'", "\'" + data.password + "\'"]
+            ["username", "email", "password"], 
+            ["\'" + username + "\'", "\'" + email + "\'", "\'" + encryptedPassword + "\'"]
         );
     });
 
@@ -43,14 +51,23 @@ app.post("/signup", (req, res) => {
     }
 });
 
-
-
-app.get("/list", (req, res) => {
-    const instance = services.getInstance();
+app.post("/login", (req, res) => {
+    let user = null;
+    let instance = services.getInstance();
+    let username = "\'" + req.body.username + "\'";
+    let encryptedPassword = req.body.password;
+    let decipher = crypto.createDecipheriv(algorithm, crypto.scryptSync(encryptedPassword, 'salt', 24), iv);
+    let password = "\'" + decipher.update(encryptedPassword, 'hex', 'utf8') + "\'";
+    db.serialize(() => {
+        user = instance.selectConditionally(db, "User", true, null, ["username = " + username, "password = " + password]);
+    });
+    if(user) {
+        res.render(secrets);
+    }
 });
 
-app.get("/add", (req, res) => {
-    const instance = services.getInstance();
+app.get("/list", (req, res) => {
+    let instance = services.getInstance();
 });
 
 app.listen(3000, () => {

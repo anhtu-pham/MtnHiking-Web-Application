@@ -23,12 +23,12 @@ class Services {
         let attributes = attributeList.join(", ");
         let sql = isAll ? "SELECT * FROM " + table : "SELECT " + attributes + " FROM " + table;
         console.log(sql);
-        db.each(sql, (error, row) => {
+        db.all(sql, (error, rows) => {
             if(error) {
                 console.log(error.message);
                 console.log("Cannot select");
             }
-            console.log(row);
+            return rows;
         });
     }
 
@@ -37,13 +37,13 @@ class Services {
         let conditions = conditionList.join(" AND ");
         let sql = isAll ? "SELECT * FROM " + table + " WHERE " + conditions : "SELECT " + attributes + " FROM " + table + " WHERE " + conditions;
         console.log(sql);
-        db.each(sql, (error, row) => {
+        db.all(sql, (error, rows) => {
             if(error) {
                 console.log(error.message);
                 console.log("Cannot select conditionally");
                 throw(error);
             }
-            console.log(row);
+            return rows;
         });
     }
 
