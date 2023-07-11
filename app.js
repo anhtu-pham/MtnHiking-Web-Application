@@ -21,9 +21,13 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public")); // to use local things of /public folder (not on web)
 
+app.get("/", (req, res) => {
+    res.render("home");
+});
+
 app.get("/signup", (req, res) => {
     // res.sendFile(__dirname + "/views/authentication/signup.ejs");
-    res.render("signup");
+    res.render("signup", {hasTaken: ""});
 });
 
 app.post("/signup", (req, res) => {
@@ -33,22 +37,30 @@ app.post("/signup", (req, res) => {
     let password = req.body.password;
     let cipher = crypto.createCipheriv(algorithm, crypto.scryptSync(password, 'salt', 24), iv);
     let encryptedPassword = cipher.update(password, 'utf8', 'hex') + cipher.final('hex');
-    db.serialize(() => {
-        instance.insert(
-            db, 
-            "User", 
-            ["username", "email", "password"], 
-            ["\'" + username + "\'", "\'" + email + "\'", "\'" + encryptedPassword + "\'"]
-        );
+    instance.insert(
+        db, 
+        "User", 
+        ["username", "email", "password"], 
+        ["\'" + username + "\'", "\'" + email + "\'", "\'" + encryptedPassword + "\'"]
+    )
+    .then(() => {
+        res.render("success");
+    })
+    .catch((error) => {
+        res.render("signup", {hasTaken: "The username has been taken"});
     });
 
-    const status = res.statusCode;
-    if(status === 200) {
-        res.render("success");
-    }
-    else {
-        res.render("failure");
-    }
+    // const status = res.statusCode;
+    // if(status === 200) {
+    //     res.render("success");
+    // }
+    // else {
+    //     res.render("failure");
+    // }
+});
+
+app.post("/failure", (req, res) => {
+    res.render("signup");
 });
 
 app.get("/login", (req, res) => {
@@ -56,16 +68,17 @@ app.get("/login", (req, res) => {
 });
 
 app.post("/login", (req, res) => {
-    let user = null;
     let instance = services.getInstance();
-    let username = "\'" + req.body.username + "\'";
+    let username = req.body.username;
     let password = req.body.password;
     let cipher = crypto.createCipheriv(algorithm, crypto.scryptSync(password, 'salt', 24), iv);
     let encryptedPassword = cipher.update(password, 'utf8', 'hex') + cipher.final('hex');
-    db.serialize(() => {
-        user = instance.selectConditionally(db, "User", true, null, ["username = " + username, "password = " + encryptedPassword]);
+    instance.selectConditionally(db, "User", true, null, ["username = \'" + username + "\'", "password = \'" + encryptedPassword + "\'"])
+    .then(response => {
+        if(response.length == 1) {
+            res.render("secrets");
+        }
     });
-    res.render(secrets);
 });
 
 app.get("/list", (req, res) => {
