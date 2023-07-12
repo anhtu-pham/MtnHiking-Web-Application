@@ -25,25 +25,27 @@ class Services {
     }
 
     select(db, table, isAll, attributeList) {
-        let records = [];
         let attributes = null;
         if(!isAll) {
             attributes = attributeList.join(", ");
         }
         let sql = isAll ? "SELECT * FROM " + table : "SELECT " + attributes + " FROM " + table;
         console.log(sql);
-        db.each(sql, (error, row) => {
-            if(error) {
-                console.log(error.message);
-                console.log("Cannot select");
-            }
-            records.push(row);
+        return new Promise((resolve, reject) => {
+            db.all(sql, (error, rows) => {
+                if(error) {
+                    console.log(error.message);
+                    console.log("Cannot select");
+                    reject(error);
+                }
+                else {
+                    resolve(rows);
+                }
+            });
         });
-        return records;
     }
 
     selectConditionally(db, table, isAll, attributeList, conditionList) {
-
         let attributes = null;
         if(!isAll) {
             attributes = attributeList.join(", ");
@@ -58,7 +60,9 @@ class Services {
                     console.log("Cannot select conditionally");
                     reject(error);
                 }
-                resolve(rows);
+                else {
+                    resolve(rows);
+                }
             });
         });
     }
@@ -68,11 +72,17 @@ class Services {
         let toUpdate = toUpdateList.join(", ");
         let sql = "UPDATE " + table + " SET " + toUpdate + " WHERE " + conditions;
         console.log(sql);
-        db.run(sql, (error) => {
-            if(error) {
-                console.log(error.message);
-                console.log("Cannot update");
-            }
+        return new Promise((resolve, reject) => {
+            db.run(sql, (error) => {
+                if(error) {
+                    console.log(error.message);
+                    console.log("Cannot update");
+                    reject(error);
+                }
+                else {
+                    resolve();
+                }
+            });
         });
     }
 
@@ -80,11 +90,17 @@ class Services {
         let conditions = conditionList.map((condition) => (condition)).join(" AND ");
         let sql = "DELETE FROM " + table + " WHERE " + conditions;
         console.log(sql);
-        db.run(sql, (error) => {
-            if(error) {
-                console.log(error.message);
-                console.log("Cannot delete");
-            }
+        return new Promise((resolve, reject) => {
+            db.run(sql, (error) => {
+                if(error) {
+                    console.log(error.message);
+                    console.log("Cannot delete");
+                    reject(error);
+                }
+                else {
+                    resolve();
+                }
+            });
         });
     }
 }

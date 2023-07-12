@@ -17,7 +17,7 @@
 
     <style>
       body {
-        background: url("images/background_image_1.jpg") no-repeat center center
+        background: url("images/background_image_9.jpg") no-repeat center center
           fixed;
         -webkit-background-size: cover;
         -moz-background-size: cover;
@@ -111,13 +111,12 @@
     <div class="container col-xl-10 col-xxl-8 px-4 py-5">
       <div class="row align-items-center g-lg-5 py-5">
         <div class="col-lg-7 text-center text-lg-start">
-          <h1 class="display-4 fw-bold lh-1 text-body-emphasis mb-3">
+          <h1 class="display-2 fw-bold lh-1 text-body-emphasis mb-3">
             SIGN UP
           </h1>
-          <p class="col-lg-10 fs-3">
-            Please type your first name, last name, email address, and password
-            in the boxes to create a new account.
-          </p>
+          <!-- <p class="col-lg-10 fs-3">
+            Register for new account
+          </p> -->
         </div>
         <div class="col-md-10 mx-auto col-lg-5">
           <form
@@ -127,7 +126,7 @@
             method="post"
           >
             <div>
-              <p><%= hasTaken %></p>
+              <p><%= err %></p>
             </div>
             <div class="form-floating mb-3">
               <input
