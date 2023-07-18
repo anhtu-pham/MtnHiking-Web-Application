@@ -24,40 +24,40 @@ class Services {
         });
     }
 
-    select(db, table, isAll, attributeList) {
-        let attributes = null;
-        if(!isAll) {
-            attributes = attributeList.join(", ");
+    // select(db, table, attributeList, orderBy) {
+    //     let attributes = (attributeList == null) ? "*" : attributeList.join(", ");
+    //     let orderByCmd = (orderBy == null) ? "" : " ORDER BY " + orderBy;
+    //     let sql = "SELECT DISTINCT " + attributes + " FROM " + table + orderByCmd;
+    //     console.log(sql);
+    //     return new Promise((resolve, reject) => {
+    //         db.all(sql, (error, rows) => {
+    //             if(error) {
+    //                 console.log(error.message);
+    //                 console.log("Cannot select");
+    //                 reject(error);
+    //             }
+    //             else {
+    //                 resolve(rows);
+    //             }
+    //         });
+    //     });
+    // }
+
+    select(db, tableList, attributeList, conditionList, orderBy) {
+        let tables = tableList.join(", ");
+        let attributes = (attributeList == null) ? "*" : attributeList.join(", ");
+        let conditions = (conditionList == null) ? "" : "WHERE " + conditionList.join(" AND ");
+        let orderByCmd = (orderBy == null) ? "" : " ORDER BY " + orderBy;
+        let sql = "SELECT DISTINCT " + attributes + " FROM " + tables + conditions + orderByCmd;
+        if(isOrdered != null) {
+
         }
-        let sql = isAll ? "SELECT * FROM " + table : "SELECT " + attributes + " FROM " + table;
         console.log(sql);
         return new Promise((resolve, reject) => {
             db.all(sql, (error, rows) => {
                 if(error) {
                     console.log(error.message);
                     console.log("Cannot select");
-                    reject(error);
-                }
-                else {
-                    resolve(rows);
-                }
-            });
-        });
-    }
-
-    selectConditionally(db, table, isAll, attributeList, conditionList) {
-        let attributes = null;
-        if(!isAll) {
-            attributes = attributeList.join(", ");
-        }
-        let conditions = conditionList.join(" AND ");
-        let sql = isAll ? "SELECT * FROM " + table + " WHERE " + conditions : "SELECT " + attributes + " FROM " + table + " WHERE " + conditions;
-        console.log(sql);
-        return new Promise((resolve, reject) => {
-            db.all(sql, (error, rows) => {
-                if(error) {
-                    console.log(error.message);
-                    console.log("Cannot select conditionally");
                     reject(error);
                 }
                 else {
