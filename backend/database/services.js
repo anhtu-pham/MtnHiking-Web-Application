@@ -49,9 +49,6 @@ class Services {
         let conditions = (conditionList == null) ? "" : "WHERE " + conditionList.join(" AND ");
         let orderByCmd = (orderBy == null) ? "" : " ORDER BY " + orderBy;
         let sql = "SELECT DISTINCT " + attributes + " FROM " + tables + conditions + orderByCmd;
-        if(isOrdered != null) {
-
-        }
         console.log(sql);
         return new Promise((resolve, reject) => {
             db.all(sql, (error, rows) => {
@@ -87,7 +84,7 @@ class Services {
     }
 
     delete(db, table, conditionList) {
-        let conditions = conditionList.map((condition) => (condition)).join(" AND ");
+        let conditions = conditionList.join(" AND ");
         let sql = "DELETE FROM " + table + " WHERE " + conditions;
         console.log(sql);
         return new Promise((resolve, reject) => {
