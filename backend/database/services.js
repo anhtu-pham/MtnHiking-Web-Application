@@ -2,7 +2,8 @@ let instance = null;
 
 class Services {
     static getInstance() {
-        return instance ? instance : new Services();
+        instance = instance ? instance : new Services();
+        return instance;
     }
 
     insert(db, table, attributeList, valueList) {
