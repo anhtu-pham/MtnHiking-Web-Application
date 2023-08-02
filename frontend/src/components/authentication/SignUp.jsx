@@ -1,4 +1,5 @@
 import React from "react";
+import { Form } from "react-router-dom";
 import "./signup.css";
 
 const SignUp = () => {
@@ -6,7 +7,7 @@ const SignUp = () => {
     <div className="signup col-xl-10 col-xxl-8 px-4 py-5">
       <div className="row align-items-center g-lg-5 py-5">
         <div className="col-lg-6 text-center text-lg-start">
-          <h1 className="display-2 fw-bold lh-1 text-body-emphasis mb-3 offset-md-4">
+          <h1 className="display-2 fw-bold lh-1 text-body-emphasis mb-3">
             SIGN UP
           </h1>
           {/* <!-- <p className="col-lg-10 fs-3">
@@ -14,7 +15,7 @@ const SignUp = () => {
           </p> --> */}
         </div>
         <div className="col-md-10 mx-auto col-lg-4">
-          <form
+          <Form
             className="form-signup p-4 p-md-5 border rounded-3 bg-body-tertiary"
             action="/signup"
             method="post"
@@ -57,7 +58,7 @@ const SignUp = () => {
             </button>
             <hr className="my-4" />
             {/* <small class="text-body-secondary">Form to sign up for a new account.</small> */}
-          </form>
+          </Form>
         </div>
       </div>
     </div>

@@ -1,0 +1,13 @@
+{
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  },
+  "scripts": {
+    "start:frontend": "cd ./frontend && npm run dev",
+    "start:backend": "cd ./backend && node app.js",
+    "start:both": "concurrently \"npm run start:frontend\" \"npm run start:backend\""
+  },
+  "dependencies": {
+    "http-proxy-middleware": "^2.0.6"
+  }
+}

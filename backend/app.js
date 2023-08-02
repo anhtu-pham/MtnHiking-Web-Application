@@ -7,12 +7,13 @@ const ct = require("crypto");
 const session = require("express-session");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
+const cors = require("cors");
 // const services = require(__dirname + "/database/services.js");
 
 const mountains = require(__dirname + "/functionalities/mountains.js");
 const trails = require(__dirname + "/functionalities/trails.js");
 const users = require(__dirname + "/functionalities/users.js");
-const trips = require(__dirname + "functionalities/trips.js");
+const trips = require(__dirname + "/functionalities/trips.js");
 
 let SQLiteStore = require("connect-sqlite3")(session);
 
@@ -31,6 +32,7 @@ const iv = Buffer.alloc(16, 0);
 
 const app = express();
 app.set('view engine', 'ejs');
+app.use(cors());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public")); // to use local things of /public folder (not on web)
 
@@ -72,12 +74,12 @@ passport.deserializeUser((user, cb) => {
 });
 
 app.get("/", (req, res) => {
-    res.render("home");
+    // res.render("home");
 });
 
 app.route("/signup")
     .get((req, res) => {
-        res.render("signup", {err: ""});
+        // res.render("signup", {err: ""});
     })
     .post((req, res) => {
         // let instance = services.getInstance();
@@ -112,7 +114,7 @@ app.route("/signup")
 
 app.route("/login")
     .get((req, res) => {
-        res.render("login", {err: ""});
+        // res.render("login", {err: ""});
     })
     .post((req, res) => {
         passport.authenticate("local", (error, user) => {

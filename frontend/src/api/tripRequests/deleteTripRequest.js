@@ -1,4 +1,4 @@
-import API_URL from '../config';
+import API_URL from '../../config';
 
 async function deleteTripRequest(trip) {
     return fetch(`${API_URL}/profile/trips/${trip.tripID}`, {

@@ -1,4 +1,4 @@
-import API_URL from '../config';
+import API_URL from '../../config';
 
 async function addTripRequest(trip) {
     return fetch(`${API_URL}/profile/trips`, {
