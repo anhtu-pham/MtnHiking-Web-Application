@@ -78,9 +78,9 @@ app.get("/", (req, res) => {
 });
 
 app.route("/signup")
-    .get((req, res) => {
-        // res.render("signup", {err: ""});
-    })
+    // .get((req, res) => {
+    //     res.render("signup", {err: ""});
+    // })
     .post((req, res) => {
         // let instance = services.getInstance();
         let username = req.body.username;
@@ -96,7 +96,9 @@ app.route("/signup")
             };
             req.login(user, (error) => {
                 if(error) {
-                    res.render("signup", {err: "An error occurred. Please try again."});
+                    // res.render("signup", {err: "An error occurred. Please try again."});
+                    // res.redirect("/signup");
+                    throw(error);
                 }
                 else {
                     res.redirect("/main");
@@ -104,7 +106,8 @@ app.route("/signup")
             });
         })
         .catch((error) => {
-            res.render("signup", {err: "Username was taken. Please try another username."});
+            // res.render("signup", {err: "Username was taken. Please try another username."});
+            res.redirect("/signup");
         });
     });
 

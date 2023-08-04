@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import ReactStars from "react-stars";
 import { useQuery, useQueryClient, useMutation } from "react-query";
 import ClipLoader from "react-spinners/ClipLoader";
-import readTripsRequest from "../../api/tripRequests/readTripsRequest";
-import updateTripRequest from "../../api/tripRequests/updateTripRequest";
-import removeTripRequest from "../../api/tripRequests/deleteTripRequest";
+import readTripsRequest from "../../api/trips/readTripsRequest";
+import updateTripRequest from "../../api/trips/updateTripRequest";
+import removeTripRequest from "../../api/trips/deleteTripRequest";
 
 const Trip = (props) => {
   return (

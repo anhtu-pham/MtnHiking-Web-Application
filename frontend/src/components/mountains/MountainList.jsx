@@ -1,7 +1,7 @@
 import React from "react";
 import { useQuery } from "react-query";
 import ClipLoader from 'react-spinners/ClipLoader';
-import readMtnsRequest from "../../api/mtnRequests/readMtnsRequest";
+import readMtnsRequest from "../../api/mountains/readMtnsRequest";
 
 const Mountain = (props) => {
 

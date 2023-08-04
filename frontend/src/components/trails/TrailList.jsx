@@ -1,7 +1,7 @@
 import React from "react";
 import { useQuery } from "react-query";
 import ClipLoader from "react-spinners/ClipLoader";
-import readTrailsRequest from "../../api/trailRequests/readTrailsRequest";
+import readTrailsRequest from "../../api/trails/readTrailsRequest";
 import AddTripForm from "../trips/AddTripForm";
 
 const Trail = (props) => {

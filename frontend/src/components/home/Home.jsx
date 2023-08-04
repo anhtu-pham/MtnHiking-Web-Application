@@ -31,14 +31,14 @@ const Home = () => {
                 Sign up
               </button>
             </Form>
-            <form action="/login" method="get">
+            <Form action="/login" method="get">
               <button
                 type="submit"
                 className="btn btn-outline-dark btn-lg px-4 me-sm-3 fw-bold border-3 fs-4"
               >
                 Login
               </button>
-            </form>
+            </Form>
           </div>
         </div>
       </div>

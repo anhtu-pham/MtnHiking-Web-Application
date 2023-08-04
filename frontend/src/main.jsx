@@ -1,14 +1,18 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { createBrowserRouter, createRoutesFromElements, RouterProvider, Route, Routes } from "react-router-dom";
+import { createBrowserRouter, createRoutesFromElements, RouterProvider, Route } from "react-router-dom";
 import App from "./App";
 import "bootstrap/dist/css/bootstrap.css";
-// import './index.css';
+
 import {QueryClient, QueryClientProvider} from 'react-query';
+// import { Navigate } from "react-router-dom";
+
 // import Home from "./components/home/Home";
 import SignUp from "./components/authentication/SignUp";
 import LogIn from "./components/authentication/LogIn";
-// import { BrowserRouter, Switch } from "react-router-dom";
+import MainScreen from "./components/main_screen/MainScreen";
+
+// import signUpRequest from "./api/authentication/signUpRequest"
 
 // import API_URL from './config';
 
@@ -21,25 +25,13 @@ const router = createBrowserRouter(
       <Route 
         path="/signup" 
         element={<SignUp />}
-        action={async ({params, request}) => {
-          const response = await fetch("/signup", {
-            method: "POST",
-            headers: {
-              "Content-type": 'application/json'
-            },
-            body: JSON.stringify({
-              username: request.username,
-              email: request.email,
-              password: request.password
-            })
-          });
-          if (!response.ok) {
-            throw new Error("Error");
-          }
-          // return response.json();
-        }} 
+        // action={async ({params, request}) => {
+        //   await signUpRequest(params, request);
+        //   return <Navigate to="/main" />;
+        // }} 
       />
       <Route path="/login" element={<LogIn />} />
+      <Route path="/main" element={<MainScreen />} />
     </Route>
   )
   // [

@@ -1,26 +1,24 @@
-.home {
-  height: 150%;
-  width: 100%;
-  background: url("../../assets/images/mountain_1.jpg") no-repeat center center
-    fixed;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  background-size: cover;
-  -o-background-size: cover;
+body {
+  padding-bottom: 20px;
 }
 
+nav {
+  display: flex;
+  /* justify-content: space-between;
+  align-items: center; This will vertically align the navbars
+  padding: 10px; */
+  align-content: center;
+}
+
+.navbar {
+  margin-bottom: 20px;
+}
 .bd-placeholder-img {
   font-size: 1.125rem;
   text-anchor: middle;
   -webkit-user-select: none;
   -moz-user-select: none;
   user-select: none;
-}
-
-@media (min-width: 992px) {
-  .rounded-lg-3 {
-    border-radius: 0.3rem;
-  }
 }
 
 @media (min-width: 768px) {
