@@ -1,17 +1,35 @@
 import React from "react";
 import { Form } from "react-router-dom";
+import video from "../../assets/videos/mountain_2.mp4";
 import "./login.css";
 
 const LogIn = () => {
     return (
-    <div className="login col-xl-10 col-xxl-8 px-4 py-5">
+    <div className="login col-xl-12 col-xxl-8 px-4 py-5">
+
+  <div class="video-background-holder">
+    <div class="video-background-overlay"></div>
+    <video playsinline="playsinline" autoplay="autoplay" muted="muted" loop="loop">
+      <source src={video} type="video/mp4" />
+    </video>
+  </div>
+
+
       <div className="row align-items-center g-lg-5 py-5">
         <div className="col-lg-7 text-center text-lg-start">
-          <h1 className="display-2 fw-bold lh-1 text-body-emphasis mb-3">LOG IN</h1>
+          {/* <h1 className="display-2 fw-bold lh-1 text-body-emphasis mb-3">LOG IN</h1> */}
           {/* <p className="col-lg-10 fs-3">
             Please type your email address and password in the boxes to go to
             your account.
           </p> */}
+
+          <div class="d-flex h-100 text-center align-items-center">
+            <div class="w-100 text-white">
+              <h1 class="display-4">LOG IN</h1>
+              <p class="lead mb-0">Log in your account</p>
+            </div>
+          </div>
+
         </div>
         <div className="col-md-10 mx-auto col-lg-4">
           <Form
@@ -42,8 +60,8 @@ const LogIn = () => {
               />
               <label for="floatingPassword">Password</label>
             </div>
-            <button className="w-100 btn btn-lg btn-primary" type="submit">
-              Log in
+            <button className="w-100 btn btn-lg btn-dark" type="submit">
+              Login
             </button>
             <hr className="my-4" />
           </Form>

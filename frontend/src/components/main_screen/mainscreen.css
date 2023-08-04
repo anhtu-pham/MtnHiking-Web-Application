@@ -1,18 +1,71 @@
-body {
+/* body {
   padding-bottom: 20px;
-}
-
+} */
 /* .nav {
   display: flex;
-  justify-content: space-between;
-  align-items: center; This will vertically align the navbars
-  padding: 10px;
-  align-content: center;
+  /* justify-content: space-between;
+  /* align-items: center; This will vertically align the navbars
+  padding: 10px; */
+  /* align-content: center; */
+/* } */
+/* .navbar-toggler[data-bs-theme="dark"] {
+  border-color: white;
 } */
+
+.video-background-holder {
+  /* position: relative;
+  height: calc(100vh - 72px);
+  min-height: 25rem;
+  width: 100%;
+  overflow: hidden; */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
+.video-background-holder video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  z-index: 0;
+  /* -ms-transform: translateX(-50%) translateY(-50%);
+  -moz-transform: translateX(-50%) translateY(-50%);
+  -webkit-transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-50%) translateY(-50%); */
+}
+
+.video-background-content {
+  position: relative;
+  z-index: 2;
+}
+
+.video-background-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-color: black;
+  opacity: 0.5;
+  z-index: 1;
+}
+
+.navbar-toggler[data-bs-theme="dark"] {
+  border-color: white;
+}
 
 .navbar {
   margin-bottom: 20px;
 }
+
 .bd-placeholder-img {
   font-size: 1.125rem;
   text-anchor: middle;

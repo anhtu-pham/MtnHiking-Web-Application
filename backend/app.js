@@ -8,6 +8,7 @@ const session = require("express-session");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const cors = require("cors");
+// const proxyMiddleware = require("../frontend/src/setupProxy");
 // const services = require(__dirname + "/database/services.js");
 
 const mountains = require(__dirname + "/functionalities/mountains.js");
@@ -31,10 +32,12 @@ const iv = Buffer.alloc(16, 0);
 // let formattedCurrentTime = null;
 
 const app = express();
+// proxyMiddleware(app);
 app.set('view engine', 'ejs');
 app.use(cors());
-app.use(bodyParser.urlencoded({extended: true}));
-app.use(express.static("public")); // to use local things of /public folder (not on web)
+// app.use(bodyParser.urlencoded({extended: true}));
+app.use(express.json());
+// app.use(express.static("public")); // to use local things of /public folder (not on web)
 
 app.use(session({
     secret: "secret",
@@ -82,14 +85,18 @@ app.route("/signup")
     //     res.render("signup", {err: ""});
     // })
     .post((req, res) => {
+        console.log("POST RECEIVED");
+        // let {username, email, password} = req.body;
+        // console.log(username + " " + email + " " + password);
         // let instance = services.getInstance();
-        let username = req.body.username;
-        let email = req.body.email;
-        let password = req.body.password;
-        let cipher = ct.createCipheriv(algorithm, ct.scryptSync(password, 'salt', 24), iv);
-        let encryptedPassword = cipher.update(password, 'utf8', 'hex') + cipher.final('hex');
+        let username = "\'" + req.body.username + "\'";
+        let email = "\'" + req.body.email + "\'";
+        let initialPassword = "\'" + req.body.password + "\'";
+        let cipher = ct.createCipheriv(algorithm, ct.scryptSync(initialPassword, 'salt', 24), iv);
+        let encryptedPassword = cipher.update(initialPassword, 'utf8', 'hex') + cipher.final('hex');
+        let password = "\'" + encryptedPassword + "\'";
         // instance.insert(db, "User", ["username", "email", "password"], ["\'" + username + "\'", "\'" + email + "\'", "\'" + encryptedPassword + "\'"])
-        users.addUser(username, email, encryptedPassword)
+        users.addUser(username, email, password)
         .then(() => {
             let user = {
                 username: username
@@ -98,16 +105,19 @@ app.route("/signup")
                 if(error) {
                     // res.render("signup", {err: "An error occurred. Please try again."});
                     // res.redirect("/signup");
+                    console.log(error);
                     throw(error);
                 }
                 else {
-                    res.redirect("/main");
+                    res.json({username: username});
                 }
             });
         })
         .catch((error) => {
             // res.render("signup", {err: "Username was taken. Please try another username."});
-            res.redirect("/signup");
+            // res.redirect("/signup");
+            console.log(error);
+            throw(error);
         });
     });
 

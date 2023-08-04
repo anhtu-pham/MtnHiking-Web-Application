@@ -21,7 +21,7 @@ async function addUser(username, email, password) {
         await crud.insert(
             "User",
             ["username", "email", "password"],
-            ["\'" + username + "\'", "\'" + email + "\'", "\'" + password + "\'"]
+            [username, email, password]
         );
     }
     catch(error) {
