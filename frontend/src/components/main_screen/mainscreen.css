@@ -2,13 +2,13 @@ body {
   padding-bottom: 20px;
 }
 
-nav {
+/* .nav {
   display: flex;
-  /* justify-content: space-between;
+  justify-content: space-between;
   align-items: center; This will vertically align the navbars
-  padding: 10px; */
+  padding: 10px;
   align-content: center;
-}
+} */
 
 .navbar {
   margin-bottom: 20px;
