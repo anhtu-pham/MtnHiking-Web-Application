@@ -11,7 +11,7 @@ async function getAssociatedTrails(mountainID, orderBy) {
     }
     catch (error) {
         console.log("Cannot retrieve trail list");
-        throw(error);
+        // throw(error);
     }
 }
 
@@ -28,7 +28,7 @@ async function getFinishedTrails(formattedCurrentTime) {
     catch (error) {
         console.log(error);
         console.log("Cannot retrieve trail list");
-        throw(error);
+        // throw(error);
     }
 }
 
@@ -45,7 +45,7 @@ async function getSpanningTrails() {
     catch (error) {
         console.log(error);
         console.log("Cannot retrieve trail list");
-        throw(error);
+        // throw(error);
     }
 }
 

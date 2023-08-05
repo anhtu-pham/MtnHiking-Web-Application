@@ -1,33 +1,37 @@
 const crud = require("./crud.js");
 
 async function findUser(username, password) {
-    try {
-        let user = await crud.select(
+    return new Promise((resolve, reject) => {
+        crud.select(
             ["User"], 
             null, 
             ["username = \'" + username + "\'", "password = \'" + password + "\'"], 
             null,
-            1);
-        return user;
-    }
-    catch(error) {
-        console.log("Cannot find user");
-        throw(error);
-    }
+            1)
+        .then((user) => {
+            resolve(user);
+        })
+        .catch((error) => {
+            reject(error);
+        })
+    });
 }
 
 async function addUser(username, email, password) {
-    try {
-        await crud.insert(
+    return new Promise((resolve, reject) => {
+        crud.insert(
             "User",
             ["username", "email", "password"],
-            [username, email, password]
-        );
-    }
-    catch(error) {
-        console.log("Cannot add user");
-        throw(error);
-    }
+            ["\'" + username + "\'", "\'" + email + "\'", "\'" + password + "\'"]
+        )
+        .then(() => {
+            resolve();
+        })
+        .catch((error) => {
+            console.log("Cannot add user");
+            reject(error);
+        });
+    });
 }
 
 const userFunctions = {

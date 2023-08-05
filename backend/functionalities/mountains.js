@@ -6,7 +6,7 @@ async function getMountains(cds, oB) {
         return mountains;
     } catch (error) {
         console.log("Cannot retrieve mountain list");
-        throw(error);
+        // throw(error);
     }
 }
 
@@ -24,7 +24,7 @@ async function getSpecialPlaces(mountainID) {
         return specialPlaces;
     } catch (error) {
         console.log("Cannot retrieve special places");
-        throw(error);
+        // throw(error);
     }
 }
 
@@ -42,7 +42,7 @@ async function getConditions(mountainID) {
         return conditions;
     } catch (error) {
         console.log("Cannot retrieve conditions");
-        throw(error);
+        // throw(error);
     }
 }
 

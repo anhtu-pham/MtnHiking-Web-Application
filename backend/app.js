@@ -47,10 +47,8 @@ app.use(session({
 }));
 app.use(passport.authenticate("session"));
 passport.use(new LocalStrategy(function verify(username, password, cb) {
-    // let instance = services.getInstance();
     let cipher = ct.createCipheriv(algorithm, ct.scryptSync(password, 'salt', 24), iv);
     let encryptedPassword = cipher.update(password, 'utf8', 'hex') + cipher.final('hex');
-    // instance.select(db, ["User"], null, ["username = \'" + username + "\'", "password = \'" + encryptedPassword + "\'"], null)
     users.findUser(username, encryptedPassword)
     .then(response => {
         if(response.length == 1) {
@@ -62,7 +60,6 @@ passport.use(new LocalStrategy(function verify(username, password, cb) {
     })
     .catch((error) => {
         return cb(error);
-        // res.render("login");
     });
 }));
 passport.serializeUser((user, cb) => {
@@ -86,59 +83,48 @@ app.route("/signup")
     // })
     .post((req, res) => {
         console.log("POST RECEIVED");
-        // let {username, email, password} = req.body;
-        // console.log(username + " " + email + " " + password);
-        // let instance = services.getInstance();
-        let username = "\'" + req.body.username + "\'";
-        let email = "\'" + req.body.email + "\'";
-        let initialPassword = "\'" + req.body.password + "\'";
-        let cipher = ct.createCipheriv(algorithm, ct.scryptSync(initialPassword, 'salt', 24), iv);
+        let username = req.body.username;
+        let email = req.body.email;
+        let initialPassword = req.body.password;
+        let cipher = ct.createCipheriv(algorithm, ct.scryptSync("\'" + initialPassword + "\'", 'salt', 24), iv);
         let encryptedPassword = cipher.update(initialPassword, 'utf8', 'hex') + cipher.final('hex');
-        let password = "\'" + encryptedPassword + "\'";
-        // instance.insert(db, "User", ["username", "email", "password"], ["\'" + username + "\'", "\'" + email + "\'", "\'" + encryptedPassword + "\'"])
-        users.addUser(username, email, password)
+        users.addUser(username, email, encryptedPassword)
         .then(() => {
             let user = {
                 username: username
             };
             req.login(user, (error) => {
                 if(error) {
-                    // res.render("signup", {err: "An error occurred. Please try again."});
-                    // res.redirect("/signup");
                     console.log(error);
-                    throw(error);
+                    res.json({username: "", message: "An error occurred. Please try again."});
                 }
                 else {
-                    res.json({username: username});
+                    res.json({username: username, message: ""});
                 }
             });
         })
         .catch((error) => {
-            // res.render("signup", {err: "Username was taken. Please try another username."});
-            // res.redirect("/signup");
             console.log(error);
-            throw(error);
+            res.json({username: "", message: "Username was taken. Please try another username."});
         });
     });
 
-// app.post("/failure", (req, res) => {
-//     res.render("signup");
-// });
-
 app.route("/login")
     .get((req, res) => {
-        // res.render("login", {err: ""});
     })
     .post((req, res) => {
         passport.authenticate("local", (error, user) => {
             if(error) {
-                res.render("login", {err: "An error occurred. Please try again."});
+                res.json({username: "", message: "An error occured. Please try again."});
+                // res.render("login", {err: "An error occurred. Please try again."});
             }
             else if(!user) {
-                res.render("login", {err: "Username or password is incorrect. Please try again."});
+                res.json({username: "", message: "Username or password is incorrect. Please check again."});
+                // res.render("login", {err: "Username or password is incorrect. Please try again."});
             }
             else {
-                res.redirect("/main");
+                res.json({user: user.username, message: ""});
+                // res.redirect("/main");
             }
             // successReturnToOrRedirect: "/main",
             // failureRedirect: "/login"
@@ -147,6 +133,13 @@ app.route("/login")
 
 app.route("/main")
     .get((req, res) => {
+        if(req.isAuthenticated()){
+        }
+        else {
+            res.redirect("/login");
+        }
+    })
+    .post((req, res) => {
         if(req.isAuthenticated()){
         }
         else {
@@ -187,7 +180,7 @@ app.route("/profile/trips")
             // })
             trips.getTrips(username, formattedCurrentTime)
             .then((response) => {
-                res.json({pastTrips: response.pastTrips, nextTrips: response.nextTrips})
+                res.json({pastTrips: response.pastTrips, nextTrips: response.nextTrips});
             })
             .catch((error) => {
                 console.log("Cannot retrieve trail trips");
@@ -205,12 +198,7 @@ app.route("/profile/trips")
             let startingTime = req.body.startingTime;
             let endingTime = req.body.endingTime;
 
-            // let instance = services.getInstance();
-            // instance.insert(db, "Trail_trip", ["username", "trail_ID", "starting_time", "ending_time"], ["\'" + username + "\'", trailID, "\'" + startingTime + "\'", "\'" + endingTime + "\'"])
-            trips.addTrip(username, trailID, startingTime, endingTime)
-            .catch(error => {
-                console.log("Cannot insert trail trip");
-            });
+            trips.addTrip(username, trailID, startingTime, endingTime);
         }
         else {
             res.redirect("/login");
@@ -220,22 +208,10 @@ app.route("/profile/trips")
 app.route("/profile/trips/:tripID")
     .patch((req, res) => {
         if(req.isAuthenticated()) {
-            let instance = services.getInstance();
-
             let username = req.user.username;
             let tripID = req.params.tripID;
             let ratings = req.body.ratings;
-            instance
-            .update(db,
-                    "Trail_trip",
-                    ["ratings = " + ratings],
-                    ["trip_ID = " + tripID,
-                    "username = \'" + username + "\'"])
-            .then(() => {
-            })
-            .catch(error => {
-                console.log("Cannot update ratings");
-            })
+            trips.updateTrip(username, tripID, ratings);
         }
         else {
             res.redirect("/login");
@@ -245,17 +221,7 @@ app.route("/profile/trips/:tripID")
         if(req.isAuthenticated()) {
             let username = req.user.username;
             let tripID = req.params.tripID;
-
-            // let instance = services.getInstance();
-            // instance
-            // .delete(db,
-            //         "Trail_trip",
-            //         ["trip_ID = " + tripID,
-            //         "username = \'" + username + "\'"])
-            trips.removeTrip(username, tripID)
-            .catch((error) => {
-                console.log("Cannot remove trip");
-            })
+            trips.removeTrip(username, tripID);
         }
         else {
             res.redirect("/login");

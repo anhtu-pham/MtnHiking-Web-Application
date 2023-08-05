@@ -1,17 +1,22 @@
 import React, { useState } from "react";
-import { Form, useNavigate } from "react-router-dom";
+import { Form, useNavigate, useLocation } from "react-router-dom";
 import axios from 'axios';
+import { API_URL } from "../../config.js";
 
 import video from "../../assets/videos/mountain_2.mp4";
 import "./signup.css";
 
-const baseURL = "http://localhost:5000";
+// const API_URL = "http://localhost:5000";
 
 const SignUp = () => {
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const location = useLocation();
+  const message = location.state;
+
   const requestSignUp = async () => {
 
     // e.preventDefault();
@@ -36,17 +41,26 @@ const SignUp = () => {
     //   navigate("/");
     // }
 
-    try {
-      const response = await axios.post(`${baseURL}/signup`, {
+    // try {
+
+      let response = await axios.post(API_URL + "/signup", {
         username: username,
         email: email,
         password: password
       });
-      navigate("/main", { state: response.data.username });
-    }
-    catch (error) {
-      navigate("/signup");
-    }
+      let receivedUsername = response.data.username;
+      let receivedMessage = response.data.message;
+      if(receivedMessage != "") {
+        navigate("/signup", { state: receivedMessage });
+      }
+      else {
+        navigate("/main", { state: receivedUsername });
+      }
+
+    // }
+    // catch (error) {
+    //   navigate("/signup");
+    // }
 
     // .then(() => {
     //   navigate("/main", {state: username});
@@ -138,7 +152,7 @@ const SignUp = () => {
               Signup
             </button>
             <hr className="my-4" />
-            {/* <small class="text-body-secondary">Form to sign up for a new account.</small> */}
+            <small class="text-body-secondary">{message}</small>
           </Form>
         </div>
       </div>

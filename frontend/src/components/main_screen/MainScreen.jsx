@@ -1,9 +1,10 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
-// import Mountains from "../mountains/Mountains";
-// import video from "./mountain_1.mp4";
 import video from "../../assets/videos/mountain_3.mp4";
 import "./mainscreen.css";
+
+// import Mountains from "../mountains/Mountains";
+// import video from "./mountain_1.mp4";
 
 const MainScreen = () => {
   const location = useLocation();
@@ -175,7 +176,7 @@ const MainScreen = () => {
         <div class="video-background-content container h-100">
           <div class="d-flex h-100 text-center align-items-center">
             <div class="w-100 text-white">
-              <h1 class="display-4">MTNHIKING</h1>
+              <h1 class="display-4">Hello {username}</h1>
               <p class="lead mb-0">HAVE GREAT EXPERIENCE</p>
             </div>
           </div>

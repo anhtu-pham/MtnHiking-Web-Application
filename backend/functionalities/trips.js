@@ -1,10 +1,8 @@
 const crud = require("./crud.js");
 
 async function getTrips(username, formattedCurrentTime) {
-    let nextTrips = [];
-    let pastTrips = [];
-    try {
-        let trips = await crud.select(
+    return new Promise((resolve, reject) => {
+        crud.select(
             ["User_Trip", "Trip", "Trip_Trail", "Trail"],
             [
                 "Trip.trip_ID",
@@ -20,41 +18,25 @@ async function getTrips(username, formattedCurrentTime) {
                 "username = \'" + username + "\'",
             ],
             "ending_time DESC"
-        );
+        )
+        .then((trips) => {
+            let nextTrips = [];
+            let pastTrips = trips;
+            let i = 0;
+            while(trips[i]["ending_time"] > formattedCurrentTime) {
+                let trip = pastTrips.shift();
+                nextTrips.push(trip);
+                i++;
+            }
+            resolve({pastTrips: pastTrips, nextTrips: nextTrips});
+        })
+        .catch((error) => {
+            console.log(error);
+            console.log("Cannot get trip list");
+            reject(error);
+        });
 
-        pastTrips = trips;
-        let i = 0;
-        while(trips[i]["ending_time"] > formattedCurrentTime) {
-            let trip = pastTrips.shift();
-            nextTrips.push(trip);
-            i++;
-        }
-        return {pastTrips: pastTrips, nextTrips: nextTrips};
-
-        // instance
-        //     .select(db, 
-        //             ["User", "Trail_trip", "Trail"], 
-        //             ["Trail_trip.trip_ID", "Trail.trail_name", "Trail_trip.starting_time", "Trail_trip.ending_time", "Trail_trip.ratings"], 
-        //             ["User.username = Trail_trip.username",
-        //             "Trail_trip.trail_ID = Trail.trail_ID",
-        //             "User.username = \'" + username + "\'"],
-        //             "Trail_trip.starting_time DESC")
-        //     .then((response) => {
-        //         pastTripList = response;
-        //         let i = 0;
-        //         while(response[i]["Trail_trip.ending_time"] > formattedCurrentTime) {
-        //             let trip = pastTripList.shift();
-        //             nextTripList.push(trip);
-        //             i++;
-        //         }
-        //         // res.json({trips: response});
-        //         res.json({pastTripList: pastTripList, nextTripList: nextTripList});
-        //     })
-    } catch (error) {
-        console.log(error);
-        console.log("Cannot get trip list");
-        throw(error);
-    }
+    });
 }
 
 async function addTrip(username, trailID, startingTime, endingTime) {
@@ -96,39 +78,24 @@ async function addTrip(username, trailID, startingTime, endingTime) {
     } catch (error) {
         console.log(error);
         console.log("Cannot add trip");
-        throw(error);
+        // throw(error);
     }
 }
 
-async function updateTrip(username, tripID, trailID = "U", startingTime = "U", endingTime = "U") {
+async function updateTrip(username, tripID, ratings) {
     try {
         let userTrip = await crud.select(
             ["User_Trip"],
             null,
-            ["username = '" + username + "'", "trip_ID = " + tripID],
+            ["username = \'" + username + "\'", "trip_ID = " + tripID],
             null,
             1
         );
         if (userTrip.length == 1) {
-            if (trailID != "U") {
-                await crud.update(
-                    "Trip_Trail",
-                    ["trail_ID = " + trailID],
-                    ["trip_ID = " + tripID]
-                );
-            }
-            let toUpdate = [];
-            if (startingTime != "U") {
-                toUpdate.push("starting_time = \'" + startingTime + "\'");
-            }
-            if (endingTime != "U") {
-                toUpdate.push("ending_time = \'" + endingTime + "\'");
-            }
-            await crud.update("Trip", toUpdate, ["trip_ID = " + tripID]);
+            await crud.update("Trip", ["ratings = " + ratings], ["trip_ID = " + tripID]);
         }
     } catch (error) {
-        console.log("Cannot update trip");
-        throw(error);
+        console.log("Cannot rate trip");
     }
 }
 
@@ -148,7 +115,7 @@ async function removeTrip(username, tripID) {
         }
     } catch (error) {
         console.log("Cannot remove trip");
-        throw(error);
+        // throw(error);
     }
 }
 

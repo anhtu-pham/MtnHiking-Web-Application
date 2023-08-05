@@ -4,16 +4,19 @@ import video from "../../assets/videos/mountain_2.mp4";
 import "./login.css";
 
 const LogIn = () => {
-    return (
+
+
+
+
+  return (
     <div className="login col-xl-12 col-xxl-8 px-4 py-5">
 
-  <div class="video-background-holder">
-    <div class="video-background-overlay"></div>
-    <video playsinline="playsinline" autoplay="autoplay" muted="muted" loop="loop">
-      <source src={video} type="video/mp4" />
-    </video>
-  </div>
-
+      <div class="video-background-holder">
+        <div class="video-background-overlay"></div>
+        <video playsinline="playsinline" autoplay="autoplay" muted="muted" loop="loop">
+          <source src={video} type="video/mp4" />
+        </video>
+      </div>
 
       <div className="row align-items-center g-lg-5 py-5">
         <div className="col-lg-7 text-center text-lg-start">
@@ -68,7 +71,7 @@ const LogIn = () => {
         </div>
       </div>
     </div>
-    );
+  );
 }
 
 export default LogIn;
