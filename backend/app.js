@@ -47,7 +47,7 @@ app.use(session({
 }));
 app.use(passport.authenticate("session"));
 passport.use(new LocalStrategy(function verify(username, password, cb) {
-    let cipher = ct.createCipheriv(algorithm, ct.scryptSync(password, 'salt', 24), iv);
+    let cipher = ct.createCipheriv(algorithm, ct.scryptSync("\'" + password + "\'", 'salt', 24), iv);
     let encryptedPassword = cipher.update(password, 'utf8', 'hex') + cipher.final('hex');
     users.findUser(username, encryptedPassword)
     .then(response => {
@@ -115,19 +115,16 @@ app.route("/login")
     .post((req, res) => {
         passport.authenticate("local", (error, user) => {
             if(error) {
+                console.log(error);
                 res.json({username: "", message: "An error occured. Please try again."});
-                // res.render("login", {err: "An error occurred. Please try again."});
             }
             else if(!user) {
-                res.json({username: "", message: "Username or password is incorrect. Please check again."});
-                // res.render("login", {err: "Username or password is incorrect. Please try again."});
+                res.json({username: "", message: "Username or password is incorrect."});
             }
             else {
-                res.json({user: user.username, message: ""});
-                // res.redirect("/main");
+                let authenticatedUser = user[0];
+                res.json({username: authenticatedUser.username, message: ""});
             }
-            // successReturnToOrRedirect: "/main",
-            // failureRedirect: "/login"
         })(req, res);
     });
 

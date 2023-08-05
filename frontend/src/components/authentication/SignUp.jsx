@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Form, useNavigate, useLocation } from "react-router-dom";
 import axios from 'axios';
-import { API_URL } from "../../config.js";
+import { API_URL } from "../../config";
 
 import video from "../../assets/videos/mountain_2.mp4";
 import "./signup.css";
@@ -10,14 +10,14 @@ import "./signup.css";
 
 const SignUp = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const message = location.state;
+
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const location = useLocation();
-  const message = location.state;
-
-  const requestSignUp = async () => {
+  const requestSignUp = () => {
 
     // e.preventDefault();
 
@@ -43,19 +43,38 @@ const SignUp = () => {
 
     // try {
 
-      let response = await axios.post(API_URL + "/signup", {
-        username: username,
-        email: email,
-        password: password
+    // let response = await axios.post(API_URL + "/signup", {
+    //   username: username,
+    //   email: email,
+    //   password: password
+    // });
+    // let receivedUsername = response.data.username;
+    // let receivedMessage = response.data.message;
+    // if(receivedMessage != "") {
+    //   navigate("/signup", { state: receivedMessage });
+    // }
+    // else {
+    //   navigate("/main", { state: receivedUsername });
+    // }
+
+    axios.post(API_URL + "/signup", {
+      username: username,
+      email: email,
+      password: password
+    })
+      .then((response) => {
+        let receivedUsername = response.data.username;
+        let receivedMessage = response.data.message;
+        if (receivedMessage != "") {
+          navigate("/signup", { state: receivedMessage });
+        }
+        else {
+          navigate("/main", { state: receivedUsername });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
       });
-      let receivedUsername = response.data.username;
-      let receivedMessage = response.data.message;
-      if(receivedMessage != "") {
-        navigate("/signup", { state: receivedMessage });
-      }
-      else {
-        navigate("/main", { state: receivedUsername });
-      }
 
     // }
     // catch (error) {
@@ -108,10 +127,7 @@ const SignUp = () => {
           <Form
             className="form-signup p-4 p-md-5 border rounded-3 bg-body-tertiary"
             onSubmit={requestSignUp}
-          // action="/signup"
-          // method="post"
           >
-            <div>{/* <p><small><%= err %></small></p> */}</div>
             <div className="form-floating mb-3">
               <input
                 name="username"

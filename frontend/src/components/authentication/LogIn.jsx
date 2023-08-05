@@ -1,12 +1,37 @@
-import React from "react";
-import { Form } from "react-router-dom";
+import React, { useState } from "react";
+import { Form, useNavigate, useLocation } from "react-router-dom";
+import axios from 'axios';
+import { API_URL } from "../../config";
+
 import video from "../../assets/videos/mountain_2.mp4";
 import "./login.css";
 
 const LogIn = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const message = location.state;
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
 
-
-
+  const requestLogIn = () => {
+    axios.post(API_URL + "/login", {
+      username: username,
+      password: password
+    })
+      .then((response) => {
+        let receivedUsername = response.data.username;
+        let receivedMessage = response.data.message;
+        if (receivedMessage != "") {
+          navigate("/login", { state: receivedMessage });
+        }
+        else {
+          navigate("/main", { state: receivedUsername });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
 
   return (
     <div className="login col-xl-12 col-xxl-8 px-4 py-5">
@@ -19,7 +44,7 @@ const LogIn = () => {
       </div>
 
       <div className="row align-items-center g-lg-5 py-5">
-        <div className="col-lg-7 text-center text-lg-start">
+        <div className="col-lg-6 text-center text-lg-start">
           {/* <h1 className="display-2 fw-bold lh-1 text-body-emphasis mb-3">LOG IN</h1> */}
           {/* <p className="col-lg-10 fs-3">
             Please type your email address and password in the boxes to go to
@@ -37,12 +62,8 @@ const LogIn = () => {
         <div className="col-md-10 mx-auto col-lg-4">
           <Form
             className="form-signup p-4 p-md-5 border rounded-3 bg-body-tertiary"
-            action="/login"
-            method="post"
+            onSubmit={requestLogIn}
           >
-            <div>
-              {/* <p><small><%= err %></small></p> */}
-            </div>
             <div className="form-floating mb-3">
               <input
                 name="username"
@@ -50,6 +71,8 @@ const LogIn = () => {
                 className="form-control"
                 id="floatingInput"
                 placeholder="Username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
               />
               <label for="floatingInput">Username</label>
             </div>
@@ -60,6 +83,8 @@ const LogIn = () => {
                 className="form-control"
                 id="floatingPassword"
                 placeholder="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
               <label for="floatingPassword">Password</label>
             </div>
@@ -67,6 +92,7 @@ const LogIn = () => {
               Login
             </button>
             <hr className="my-4" />
+            <small class="text-body-secondary">{message}</small>
           </Form>
         </div>
       </div>

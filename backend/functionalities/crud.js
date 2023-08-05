@@ -37,7 +37,7 @@ async function select(
     let tables = tableList.join(", ");
     let attributes = attributeList == null ? "*" : attributeList.join(", ");
     let conditions =
-        conditionList == null ? "" : "WHERE " + conditionList.join(" AND ");
+        conditionList == null ? "" : " WHERE " + conditionList.join(" AND ");
     let orderByCmd = orderBy == null ? "" : " ORDER BY " + orderBy;
     let rows = rowConstraint == 0 ? "" : " LIMIT " + rowConstraint;
     let sql =
