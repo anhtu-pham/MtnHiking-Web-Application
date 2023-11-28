@@ -1,6 +1,6 @@
 const crud = require("./crud.js");
 
-async function getTrips(username, formattedCurrentTime) {
+const getTrips = async (username, formattedCurrentTime) => {
     return new Promise((resolve, reject) => {
         crud.select(
             ["User_Trip", "Trip", "Trip_Trail", "Trail"],
@@ -39,7 +39,7 @@ async function getTrips(username, formattedCurrentTime) {
     });
 }
 
-async function addTrip(username, trailID, startingTime, endingTime) {
+const addTrip = async (username, trailID, startingTime, endingTime) => {
     try {
         let associatedTrail = await crud.select(
             ["Trail"],
@@ -82,7 +82,7 @@ async function addTrip(username, trailID, startingTime, endingTime) {
     }
 }
 
-async function updateTrip(username, tripID, ratings) {
+const updateTrip = async (username, tripID, ratings) => {
     try {
         let userTrip = await crud.select(
             ["User_Trip"],
@@ -99,7 +99,7 @@ async function updateTrip(username, tripID, ratings) {
     }
 }
 
-async function removeTrip(username, tripID) {
+const removeTrip = async (username, tripID) => {
     try {
         let userTrip = await crud.select(
             ["User_Trip"],

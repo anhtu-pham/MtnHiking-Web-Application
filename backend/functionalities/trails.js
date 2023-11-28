@@ -1,6 +1,6 @@
 const crud = require("./crud.js");
 
-async function getAssociatedTrails(mountainID, orderBy) {
+const getAssociatedTrails = async (mountainID, orderBy) => {
     try {
         let trails = await crud.select(
             ["Trail", "Mountain_Trail"],
@@ -15,7 +15,7 @@ async function getAssociatedTrails(mountainID, orderBy) {
     }
 }
 
-async function getFinishedTrails(formattedCurrentTime) {
+const getFinishedTrails = async (formattedCurrentTime) => {
     try {
         let trails = await crud.select(
             ["Trail T", "Trip_Trail R1"],
@@ -32,7 +32,7 @@ async function getFinishedTrails(formattedCurrentTime) {
     }
 }
 
-async function getSpanningTrails() {
+const getSpanningTrails = async () => {
     try {
         let trails = await crud.select(
             ["Trail T", "Mountain_Trail M1"],

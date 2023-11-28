@@ -8,6 +8,9 @@
     "start:both": "concurrently \"npm run start:frontend\" \"npm run start:backend\""
   },
   "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@mui/material": "^5.14.18",
     "http-proxy-middleware": "^2.0.6"
   }
 }

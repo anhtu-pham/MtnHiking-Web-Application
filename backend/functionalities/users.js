@@ -1,6 +1,6 @@
 const crud = require("./crud.js");
 
-async function findUser(username, password) {
+const findUser = async (username, password) => {
     return new Promise((resolve, reject) => {
         crud.select(
             ["User"], 
@@ -17,7 +17,7 @@ async function findUser(username, password) {
     });
 }
 
-async function addUser(username, email, password) {
+const addUser = async (username, email, password) => {
     return new Promise((resolve, reject) => {
         crud.insert(
             "User",
@@ -34,9 +34,13 @@ async function addUser(username, email, password) {
     });
 }
 
+const updateInformation = async (username, information) => {
+}
+
 const userFunctions = {
     findUser: findUser,
-    addUser: addUser
+    addUser: addUser,
+    updateInformation: updateInformation
 }
 
 module.exports = userFunctions;

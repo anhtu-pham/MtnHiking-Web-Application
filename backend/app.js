@@ -1,20 +1,21 @@
 //jshint esversion:6
-const express = require("express");
-const bodyParser = require("body-parser");
-const ejs = require("ejs");
-const sqlite3 = require("sqlite3").verbose();
-const ct = require("crypto");
-const session = require("express-session");
-const passport = require("passport");
-const LocalStrategy = require("passport-local");
-const cors = require("cors");
+let express = require("express");
+let bodyParser = require("body-parser");
+let ejs = require("ejs");
+let sqlite3 = require("sqlite3").verbose();
+let ct = require("crypto");
+let session = require("express-session");
+let passport = require("passport");
+let LocalStrategy = require("passport-local");
+let cors = require("cors");
+// let ensureLogIn = require("connect-ensure-login").ensureLoggedIn;
 // const proxyMiddleware = require("../frontend/src/setupProxy");
 // const services = require(__dirname + "/database/services.js");
 
-const mountains = require(__dirname + "/functionalities/mountains.js");
-const trails = require(__dirname + "/functionalities/trails.js");
-const users = require(__dirname + "/functionalities/users.js");
-const trips = require(__dirname + "/functionalities/trips.js");
+let mountainFunctions = require(__dirname + "/functionalities/mountains.js");
+let trailFunctions = require(__dirname + "/functionalities/trails.js");
+let userFunctions = require(__dirname + "/functionalities/users.js");
+let tripFunctions = require(__dirname + "/functionalities/trips.js");
 
 let SQLiteStore = require("connect-sqlite3")(session);
 
@@ -25,6 +26,8 @@ let db = new sqlite3.Database(__dirname + "/database/mountain_hiking_database.db
     }
     console.log("Successfully connected to the database");
 });
+
+// let ensureLoggedIn = ensureLogIn();
 
 const algorithm = 'aes192';
 const iv = Buffer.alloc(16, 0);
@@ -49,13 +52,13 @@ app.use(passport.authenticate("session"));
 passport.use(new LocalStrategy(function verify(username, password, cb) {
     let cipher = ct.createCipheriv(algorithm, ct.scryptSync("\'" + password + "\'", 'salt', 24), iv);
     let encryptedPassword = cipher.update(password, 'utf8', 'hex') + cipher.final('hex');
-    users.findUser(username, encryptedPassword)
+    userFunctions.findUser(username, encryptedPassword)
     .then(response => {
         if(response.length == 1) {
             return cb(null, response);
         }
         else {
-            return cb(null, false, {message: "Incorrect username or incorrect password!"});
+            return cb(null, false, {message: "Incorrect username or password!"});
         }
     })
     .catch((error) => {
@@ -73,6 +76,18 @@ passport.deserializeUser((user, cb) => {
     });
 });
 
+
+
+
+let examineAuthentication = (req, res, next) => {
+    return next();
+    if (req.isAuthenticated()) {
+        return next();
+    } else {
+        res.status(402).json({message: "Unauthorized access"});
+    }
+}
+
 app.get("/", (req, res) => {
     // res.render("home");
 });
@@ -88,7 +103,7 @@ app.route("/signup")
         let initialPassword = req.body.password;
         let cipher = ct.createCipheriv(algorithm, ct.scryptSync("\'" + initialPassword + "\'", 'salt', 24), iv);
         let encryptedPassword = cipher.update(initialPassword, 'utf8', 'hex') + cipher.final('hex');
-        users.addUser(username, email, encryptedPassword)
+        userFunctions.addUser(username, email, encryptedPassword)
         .then(() => {
             let user = {
                 username: username
@@ -144,13 +159,20 @@ app.route("/main")
         }
     });
 
-app.get("/mountain", (req, res) => {
-    if(req.isAuthenticated()){
-    }
-    else {
-        res.redirect("/login");
-    }
-});
+app.route("/mountains")
+    .get(examineAuthentication, (req, res) => {
+        console.log("GET MOUNTAINS RECEIVED");
+            console.log("AUTHENTICATED");
+            mountainFunctions.getMountains(null, null)
+            .then((response) => {
+                // console.log(response.mountains);
+                res.json({mountains: response});
+            })
+            .catch((error) => {
+                console.log("Cannot retrieve mountains");
+            });
+        console.log("END OF METHOD");
+    });
 
 app.route("/profile/trips")
     .get((req, res) => {
@@ -175,15 +197,14 @@ app.route("/profile/trips")
             //     // res.json({trips: response});
             //     res.json({pastTripList: pastTripList, nextTripList: nextTripList});
             // })
-            trips.getTrips(username, formattedCurrentTime)
+            tripFunctions.getTrips(username, formattedCurrentTime)
             .then((response) => {
                 res.json({pastTrips: response.pastTrips, nextTrips: response.nextTrips});
             })
             .catch((error) => {
                 console.log("Cannot retrieve trail trips");
             });
-        }
-        else {
+        } else {
             res.redirect("/login");
         }
     })
@@ -195,9 +216,8 @@ app.route("/profile/trips")
             let startingTime = req.body.startingTime;
             let endingTime = req.body.endingTime;
 
-            trips.addTrip(username, trailID, startingTime, endingTime);
-        }
-        else {
+            tripFunctions.addTrip(username, trailID, startingTime, endingTime);
+        } else {
             res.redirect("/login");
         }
     });
@@ -208,9 +228,8 @@ app.route("/profile/trips/:tripID")
             let username = req.user.username;
             let tripID = req.params.tripID;
             let ratings = req.body.ratings;
-            trips.updateTrip(username, tripID, ratings);
-        }
-        else {
+            tripFunctions.updateTrip(username, tripID, ratings);
+        } else {
             res.redirect("/login");
         }
     })
@@ -218,9 +237,8 @@ app.route("/profile/trips/:tripID")
         if(req.isAuthenticated()) {
             let username = req.user.username;
             let tripID = req.params.tripID;
-            trips.removeTrip(username, tripID);
-        }
-        else {
+            tripFunctions.removeTrip(username, tripID);
+        } else {
             res.redirect("/login");
         }
     });

@@ -15,12 +15,12 @@ const Home = () => {
   return (
     <div className="home text-dark px-4 py-5 text-center">
 
-<div class="video-background-holder">
-    <div class="video-background-overlay"></div>
-    <video playsinline="playsinline" autoplay="autoplay" muted="muted" loop="loop">
-      <source src={video} type="video/mp4" />
-    </video>
-  </div>
+      <div className="video-background-holder">
+        <div className="video-background-overlay"></div>
+        <video playsInline="playsinline" autoPlay="autoplay" muted="muted" loop="loop">
+          <source src={video} type="video/mp4" />
+        </video>
+      </div>
 
 
 
@@ -33,13 +33,13 @@ const Home = () => {
             </div>
           </div> */}
 
-      <div className="d-flex h-100      py-5">
+      <div className="d-flex h-100 py-5">
         {/* <h1 className="display-2 w-100 fw-bold text-white">MTNHIKING</h1> */}
-        <div className="w-100 text-white      col-lg-6 mx-auto">
+        <div className="w-100 text-white col-lg-6 mx-auto">
 
 
-          <h1 class="display-1">MTNHIKING</h1>
-          <p class="lead mb-0">Find mountain hiking trails that perfectly match your expectation,
+          <h1 className="display-1">MTNHIKING</h1>
+          <p className="lead mb-0">Find mountain hiking trails that perfectly match your expectation,
             build profile with schedule of energetic hiking trips, and many
             more!</p>
           {/* <p className="fs-5 mb-4 fw-bolder text-white">

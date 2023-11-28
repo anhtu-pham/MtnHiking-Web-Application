@@ -36,9 +36,9 @@ const LogIn = () => {
   return (
     <div className="login col-xl-12 col-xxl-8 px-4 py-5">
 
-      <div class="video-background-holder">
-        <div class="video-background-overlay"></div>
-        <video playsinline="playsinline" autoplay="autoplay" muted="muted" loop="loop">
+      <div className="video-background-holder">
+        <div className="video-background-overlay"></div>
+        <video playsInline="playsinline" autoPlay="autoplay" muted="muted" loop="loop">
           <source src={video} type="video/mp4" />
         </video>
       </div>
@@ -51,10 +51,10 @@ const LogIn = () => {
             your account.
           </p> */}
 
-          <div class="d-flex h-100 text-center align-items-center">
-            <div class="w-100 text-white">
-              <h1 class="display-4">LOG IN</h1>
-              <p class="lead mb-0">Log in your account</p>
+          <div className="d-flex h-100 text-center align-items-center">
+            <div className="w-100 text-white">
+              <h1 className="display-4">LOG IN</h1>
+              <p className="lead mb-0">Log in your account</p>
             </div>
           </div>
 
@@ -74,7 +74,7 @@ const LogIn = () => {
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
               />
-              <label for="floatingInput">Username</label>
+              <label htmlFor="floatingInput">Username</label>
             </div>
             <div className="form-floating mb-3">
               <input
@@ -86,13 +86,13 @@ const LogIn = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
-              <label for="floatingPassword">Password</label>
+              <label htmlFor="floatingPassword">Password</label>
             </div>
             <button className="w-100 btn btn-lg btn-dark" type="submit">
               Login
             </button>
             <hr className="my-4" />
-            <small class="text-body-secondary">{message}</small>
+            <small className="text-body-secondary">{message}</small>
           </Form>
         </div>
       </div>
