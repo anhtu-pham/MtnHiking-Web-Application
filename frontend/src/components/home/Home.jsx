@@ -1,7 +1,8 @@
 import React from "react";
 import { Form } from "react-router-dom";
 import video from "../../assets/videos/mountain_2.mp4";
-import "./home.css";
+import styles from "../styles/VideoStyles";
+// import "./home.css";
 // import { useNavigate } from "react-router-dom";
 
 const Home = () => {
@@ -15,9 +16,9 @@ const Home = () => {
   return (
     <div className="home text-dark px-4 py-5 text-center">
 
-      <div className="video-background-holder">
-        <div className="video-background-overlay"></div>
-        <video playsInline="playsinline" autoPlay="autoplay" muted="muted" loop="loop">
+      <div className="video-background-holder" style={styles.videoHolder}>
+        <div className="video-background-overlay" style={styles.videoOverlay}></div>
+        <video playsInline="playsinline" autoPlay="autoplay" muted="muted" loop="loop" style={styles.video}>
           <source src={video} type="video/mp4" />
         </video>
       </div>

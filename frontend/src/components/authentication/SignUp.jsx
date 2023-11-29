@@ -3,8 +3,10 @@ import { Form, useNavigate, useLocation } from "react-router-dom";
 import axios from 'axios';
 import { API_URL } from "../../config";
 
+import styles from "../styles/VideoStyles";
+
 import video from "../../assets/videos/mountain_2.mp4";
-import "./signup.css";
+// import "./signup.css";
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -16,30 +18,6 @@ const SignUp = () => {
   const [password, setPassword] = useState("");
 
   const requestSignUp = () => {
-
-    // e.preventDefault();
-
-    // try {
-    // let response = await fetch("/signup", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-type": "application/json",
-    //   },
-    //   body: JSON.stringify({
-    //     username: username,
-    //     email: email,
-    //     password: password,
-    //   }),
-    // });
-    // if(response.ok) {
-    //   console.log("FETCH COMPLETED");
-    //   navigate("/main", {state: username});
-    // }
-    // else {
-    //   navigate("/");
-    // }
-
-    // try {
 
     // let response = await axios.post(API_URL + "/signup", {
     //   username: username,
@@ -74,30 +52,14 @@ const SignUp = () => {
         console.log(error);
       });
 
-    // }
-    // catch (error) {
-    //   navigate("/signup");
-    // }
-
-    // .then(() => {
-    //   navigate("/main", {state: username});
-    // })
-    // .catch(() => {
-    //   navigate("/");
-    // });
-    // } catch (error) {
-    //   console.log(error);
-    //   navigate("/signup");
-    // }
-
   };
 
   return (
     <div className="signup col-xl-12 col-xxl-8 px-4 py-5">
 
-      <div className="video-background-holder">
-        <div className="video-background-overlay"></div>
-        <video playsInline="playsinline" autoPlay="autoplay" muted="muted" loop="loop">
+      <div className="video-background-holder" style={styles.videoHolder}>
+        <div className="video-background-overlay" style={styles.videoOverlay}></div>
+        <video playsInline="playsinline" autoPlay="autoplay" muted="muted" loop="loop" style={styles.video}>
           <source src={video} type="video/mp4" />
         </video>
       </div>
@@ -106,12 +68,6 @@ const SignUp = () => {
 
       <div className="row align-items-center g-lg-5 py-5">
         <div className="col-lg-6 text-center text-lg-start">
-          {/* <h1 className="display-2 fw-bold lh-1 text-body-emphasis mb-3">
-            SIGN UP
-          </h1> */}
-          {/* <!-- <p className="col-lg-10 fs-3">
-            Register for new account
-          </p> --> */}
           <div className="d-flex h-100 text-center align-items-center">
             <div className="w-100 text-white">
               <h1 className="display-4">SIGN UP</h1>

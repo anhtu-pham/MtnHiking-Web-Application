@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import { Form, useNavigate, useLocation } from "react-router-dom";
 import axios from 'axios';
 import { API_URL } from "../../config";
+import styles from "../styles/VideoStyles";
 
 import video from "../../assets/videos/mountain_2.mp4";
-import "./login.css";
+// import "./login.css";
 
 const LogIn = () => {
   const navigate = useNavigate();
@@ -36,9 +37,9 @@ const LogIn = () => {
   return (
     <div className="login col-xl-12 col-xxl-8 px-4 py-5">
 
-      <div className="video-background-holder">
-        <div className="video-background-overlay"></div>
-        <video playsInline="playsinline" autoPlay="autoplay" muted="muted" loop="loop">
+      <div className="video-background-holder" style={styles.videoHolder}>
+        <div className="video-background-overlay" style={styles.videoOverlay}></div>
+        <video playsInline="playsinline" autoPlay="autoplay" muted="muted" loop="loop" style={styles.video}>
           <source src={video} type="video/mp4" />
         </video>
       </div>

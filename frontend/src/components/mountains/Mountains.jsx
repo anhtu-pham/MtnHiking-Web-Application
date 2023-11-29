@@ -1,39 +1,174 @@
 import React, { useState, useEffect } from "react";
-import { Card, CardContent, Typography, Grid } from "@mui/material";
+import { styled } from '@mui/material/styles';
+import ButtonBase from '@mui/material/ButtonBase';
+import Typography from '@mui/material/Typography';
+import { Card, CardMedia, CardContent, CardActions, Grid, Button } from "@mui/material";
 import axios from 'axios';
-// import { useLocation } from "react-router-dom";
+import styles from "../styles/VideoStyles";
 import { API_URL } from '../../config';
 import video from "../../assets/videos/mountain_3.mp4";
+import MountainImage from "../../assets/images/mountain_1.jpg";
+
+
+
+
+
+
+const ImageButton = styled(ButtonBase)(({ theme }) => ({
+  position: 'relative',
+  height: 200,
+  [theme.breakpoints.down('sm')]: {
+    width: '100% !important',
+    height: 100,
+  },
+  '&:hover, &.Mui-focusVisible': {
+    zIndex: 1,
+    '& .MuiImageBackdrop-root': {
+      opacity: 0.15,
+    },
+    '& .MuiImageMarked-root': {
+      opacity: 0,
+    },
+    '& .MuiTypography-root': {
+      border: '4px solid currentColor',
+    },
+  },
+}));
+
+const ImageSrc = styled('span')({
+  position: 'absolute',
+  left: 0,
+  right: 0,
+  top: 0,
+  bottom: 0,
+  backgroundSize: 'cover',
+  backgroundPosition: 'center 40%',
+});
+
+const Image = styled('span')(({ theme }) => ({
+  position: 'absolute',
+  left: 0,
+  right: 0,
+  top: 0,
+  bottom: 0,
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  color: theme.palette.common.white,
+}));
+
+const ImageBackdrop = styled('span')(({ theme }) => ({
+  position: 'absolute',
+  left: 0,
+  right: 0,
+  top: 0,
+  bottom: 0,
+  backgroundColor: theme.palette.common.black,
+  opacity: 0.4,
+  transition: theme.transitions.create('opacity'),
+}));
+
+const ImageMarked = styled('span')(({ theme }) => ({
+  height: 3,
+  width: 18,
+  backgroundColor: theme.palette.common.white,
+  position: 'absolute',
+  bottom: -2,
+  left: 'calc(50% - 9px)',
+  transition: theme.transitions.create('opacity'),
+}));
+
+
+
 
 
 const Mountain = (props) => {
+  const {name, elevation, difficulty, summitRating} = props;
+
+  const handleOnClick = () => {
+  }
+
+  const ClickableImage = () => (
+    <ImageButton
+      focusRipple
+      key={name}
+      style={{
+        width: "100%",
+      }}
+    >
+      <ImageSrc style={{backgroundImage: `url(${MountainImage})`}} />
+      <ImageBackdrop className="MuiImageBackdrop-root" />
+      <Image>
+        <Typography component="span" variant="subtitle1" color="inherit" sx={{position: 'relative', p: 4, pt: 2, pb: (theme) => `calc(${theme.spacing(1)} + 6px)`}}>
+          {name}
+          <ImageMarked className="MuiImageMarked-root" />
+        </Typography>
+      </Image>
+    </ImageButton>
+  );
 
   return (
-    <Card variant="outlined" sx={{maxWidth: 200, margin: 5}}>
+    <Card sx={{maxWidth: 400, margin: 4}}>
+      <CardMedia 
+        component={ClickableImage}
+        height="180"
+        image={MountainImage}
+        alt={name}
+      />
       <CardContent>
-        <Typography variant="h6" component="div">
-          {props.name}
-        </Typography>
+
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>
-            <Typography variant="body2" color="text.secondary">
-              Elevation: {props.elevation}
+            <Typography variant="body4" color="text.secondary">
+              Elevation: {elevation}
             </Typography>
           </Grid>
           <Grid item xs={12} sm={6}>
-            <Typography variant="body2" color="text.secondary">
-              Difficulty: {props.difficulty}
+            <Typography variant="body4" color="text.secondary">
+              Difficulty: {difficulty}
             </Typography>
           </Grid>
           <Grid item xs={12} sm={6}>
-            <Typography variant="body2" color="text.secondary">
-              Summit rating: {props.summitRating}/5
+            <Typography variant="body4" color="text.secondary">
+              Summit Rating: {summitRating}/5
             </Typography>
           </Grid>
         </Grid>
       </CardContent>
+      <CardActions>
+        
+        <Button size="small" onClick={handleOnClick}>FIND TRAIL</Button>
+      </CardActions>
     </Card>
   );
+
+
+  // return (
+  //   <Card variant="outlined" sx={{maxWidth: 200, margin: 5}}>
+      // <CardContent>
+      //   <Typography variant="h6" component="div">
+      //     {props.name}
+      //   </Typography>
+      //   <Grid container spacing={2}>
+      //     <Grid item xs={12} sm={6}>
+      //       <Typography variant="body2" color="text.secondary">
+      //         Elevation: {props.elevation}
+      //       </Typography>
+      //     </Grid>
+      //     <Grid item xs={12} sm={6}>
+      //       <Typography variant="body2" color="text.secondary">
+      //         Difficulty: {props.difficulty}
+      //       </Typography>
+      //     </Grid>
+      //     <Grid item xs={12} sm={6}>
+      //       <Typography variant="body2" color="text.secondary">
+      //         Summit rating: {props.summitRating}/5
+      //       </Typography>
+      //     </Grid>
+      //   </Grid>
+      // </CardContent>
+  //   </Card>
+  // );
 };
 
 const MountainsDisplay = (props) => {
@@ -78,7 +213,7 @@ const Mountains = () => {
 
   return (
       <>
-      <Vid />
+      <BackgroundVideo />
       <Grid container spacing={2} justifyContent="center">
         <MountainsDisplay mountains={mountains} />
       </Grid>
@@ -86,7 +221,7 @@ const Mountains = () => {
   );
 };
 
-const Vid = () => (
+const BackgroundVideo = () => (
   <div className="video-background-holder" style={styles.videoHolder}>
     <div className="video-background-overlay" style={styles.videoOverlay}></div>
     <video
@@ -106,41 +241,5 @@ const Vid = () => (
     </div>
   </div>
 );
-
-const styles = {
-  videoHolder: {
-    position: "fixed",
-    top: 0,
-    left: 0,
-    width: "100%",
-    height: "100%",
-    zIndex: "-1"
-  },
-  video: {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    minWidth: "100%",
-    minHeight: "100%",
-    width: "auto",
-    height: "auto",
-    zIndex: 0
-  },
-  videoContent: {
-    position: "relative",
-    zIndex: 2
-  },
-  videoOverlay: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    height: "100%",
-    width: "100%",
-    backgroundColor: "black",
-    opacity: 0.5,
-    zIndex: 1,
-  }
-}
 
 export default Mountains;

@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import video from "../../assets/videos/mountain_3.mp4";
+import styles from "../styles/VideoStyles";
 // import { Button } from "@mui/material";
 // import "./mainscreen.css";
 // import Mountains from "../mountains/Mountains";
-
-// import video from "./mountain_1.mp4";
 
 const MainScreen = () => {
   const location = useLocation();
@@ -29,7 +28,7 @@ const MainScreen = () => {
           <div className="d-flex h-100 text-center align-items-center">
             <div className="w-100 text-white">
               <h1 className="display-4">Hello {username}</h1>
-              <p className="lead mb-0">HAVE GREAT EXPERIENCE</p>
+              <p className="lead mb-0">HAVE A GREAT EXPERIENCE</p>
             </div>
           </div>
         </div>
@@ -82,7 +81,7 @@ const NavigatorBar = () => {
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
                 >
-                  Dropdown
+                  Other
                 </a>
                 <ul className="dropdown-menu">
                   <li>
@@ -193,41 +192,5 @@ const NavigatorBar = () => {
   </nav>
   )
 };
-
-const styles = {
-  videoHolder: {
-    position: "fixed",
-    top: 0,
-    left: 0,
-    width: "100%",
-    height: "100%",
-    zIndex: "-1"
-  },
-  video: {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    minWidth: "100%",
-    minHeight: "100%",
-    width: "auto",
-    height: "auto",
-    zIndex: 0
-  },
-  videoContent: {
-    position: "relative",
-    zIndex: 2
-  },
-  videoOverlay: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    height: "100%",
-    width: "100%",
-    backgroundColor: "black",
-    opacity: 0.5,
-    zIndex: 1,
-  }
-}
 
 export default MainScreen;
