@@ -1,7 +1,7 @@
 import React from "react";
-import { useQuery } from "react-query";
-import ClipLoader from "react-spinners/ClipLoader";
-import readTrailsRequest from "../../api/trails/readTrailsRequest";
+// import { useQuery } from "react-query";
+// import ClipLoader from "react-spinners/ClipLoader";
+// import readTrailsRequest from "../../api/trails/readTrailsRequest";
 import AddTripForm from "../trips/AddTripForm";
 
 const Trail = (props) => {
@@ -41,12 +41,11 @@ const buildTrail = (trail) => {
   );
 };
 
-const TrailList = () => {
-  const { isLoading, data: trails } = useQuery("trails", readTrailsRequest);
+const Trails = () => {
 
   return (
-    <div>{isLoading ? <ClipLoader size={100} /> : trails.map(buildTrail)}</div>
+    <div></div>
   );
 };
 
-export default TrailList;
+export default Trails;

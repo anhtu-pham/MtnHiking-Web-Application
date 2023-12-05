@@ -12,6 +12,7 @@ import SignUp from "./components/authentication/SignUp";
 import LogIn from "./components/authentication/LogIn";
 import MainScreen from "./components/main_screen/MainScreen";
 import Mountains from "./components/mountains/Mountains";
+import Trails from "./components/trails/Trails";
 
 const queryClient = new QueryClient();
 
@@ -23,6 +24,7 @@ const router = createBrowserRouter(
       <Route path="/login" element={<LogIn />} />
       <Route path="/main" element={<MainScreen />} />
       <Route path="/mountains" element={<Mountains />} />
+      <Route path="/mountains/:name" element={<Trails />} />
     </Route>
   )
 );

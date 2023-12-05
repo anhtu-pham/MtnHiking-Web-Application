@@ -1,9 +1,11 @@
 const crud = require("./crud.js");
 
-const getMountains = async (conditions, orderBy) => {
+const getHighlyRatedMountains = async () => {
     try {
-        const mountains = await crud.select(["Mountain"], null, conditions, orderBy);
-        return mountains;
+        const mountains = await crud.select(["Mountain"], null, ["summit_rating >= 4"], "summit_rating DESC");
+        const size = mountains.length;
+        const k = size % 2 == 0 ? size : size - 1;
+        return mountains.slice(0, k);
     } catch (error) {
         console.log("Cannot retrieve mountain list");
         // throw(error);
@@ -47,7 +49,7 @@ const getConditions = async (mountainID) => {
 }
 
 const mountainFunctions = {
-    getMountains: getMountains,
+    getHighlyRatedMountains: getHighlyRatedMountains,
     getSpecialPlaces: getSpecialPlaces,
     getConditions: getConditions
 };

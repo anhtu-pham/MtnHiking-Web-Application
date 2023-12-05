@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import ReactStars from "react-stars";
 import { useQuery, useQueryClient, useMutation } from "react-query";
-import ClipLoader from "react-spinners/ClipLoader";
-import readTripsRequest from "../../api/trips/readTripsRequest";
+// import ClipLoader from "react-spinners/ClipLoader";
+// import readTripsRequest from "../../api/trips/readTripsRequest";
 import updateTripRequest from "../../api/trips/updateTripRequest";
 import removeTripRequest from "../../api/trips/deleteTripRequest";
 
@@ -98,25 +98,26 @@ const buildPastTrip = (trip) => {
 };
 
 const TripList = () => {
-  const {
-    isLoading,
-    data: { pastTrips, nextTrips },
-  } = useQuery("trips", readTripsRequest);
+  // const {
+  //   isLoading,
+  //   data: { pastTrips, nextTrips },
+  // } = useQuery("trips", readTripsRequest);
 
   return (
-    <div>
-      {isLoading ? (
-        <ClipLoader size={100} />
-      ) : (
-        <div>
-          {nextTrips.map(buildNextTrip)}
-          {pastTrips.map(buildPastTrip)}
-        </div>
-      )}
-      {/* <AddTripForm /> */}
-      {/* {2 > 0 ? <TripSchedule /> : null} */}
-      {/* {2 > 0 && <TripSchedule />} */}
-    </div>
+    <div></div>
+    // <div>
+    //   {isLoading ? (
+    //     <ClipLoader size={100} />
+    //   ) : (
+    //     <div>
+    //       {nextTrips.map(buildNextTrip)}
+    //       {pastTrips.map(buildPastTrip)}
+    //     </div>
+    //   )}
+    //   {/* <AddTripForm /> */}
+    //   {/* {2 > 0 ? <TripSchedule /> : null} */}
+    //   {/* {2 > 0 && <TripSchedule />} */}
+    // </div>
   );
 };
 

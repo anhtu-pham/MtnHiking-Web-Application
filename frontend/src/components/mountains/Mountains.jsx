@@ -8,15 +8,12 @@ import styles from "../styles/VideoStyles";
 import { API_URL } from '../../config';
 import video from "../../assets/videos/mountain_3.mp4";
 import MountainImage from "../../assets/images/mountain_1.jpg";
-
-
-
-
+import { useNavigate } from "react-router-dom";
 
 
 const ImageButton = styled(ButtonBase)(({ theme }) => ({
   position: 'relative',
-  height: 200,
+  height: "100%",
   [theme.breakpoints.down('sm')]: {
     width: '100% !important',
     height: 100,
@@ -79,28 +76,25 @@ const ImageMarked = styled('span')(({ theme }) => ({
 }));
 
 
-
-
-
 const Mountain = (props) => {
   const {name, elevation, difficulty, summitRating} = props;
 
+  const navigate = useNavigate();
+
   const handleOnClick = () => {
+    const encodedName = encodeURIComponent(name)
+    navigate("/mountains/" + encodedName);
   }
 
   const ClickableImage = () => (
-    <ImageButton
-      focusRipple
-      key={name}
-      style={{
-        width: "100%",
-      }}
-    >
+    <ImageButton onClick={handleOnClick} focusRipple key={name} style={{width: "100%"}}>
       <ImageSrc style={{backgroundImage: `url(${MountainImage})`}} />
       <ImageBackdrop className="MuiImageBackdrop-root" />
       <Image>
         <Typography component="span" variant="subtitle1" color="inherit" sx={{position: 'relative', p: 4, pt: 2, pb: (theme) => `calc(${theme.spacing(1)} + 6px)`}}>
-          {name}
+          {name} - {elevation}m
+          <br/>
+          Summit Rating {summitRating}/5
           <ImageMarked className="MuiImageMarked-root" />
         </Typography>
       </Image>
@@ -108,16 +102,15 @@ const Mountain = (props) => {
   );
 
   return (
-    <Card sx={{maxWidth: 400, margin: 4}}>
+    <Card sx={{margin: 0, height: "50vh"}}>
       <CardMedia 
         component={ClickableImage}
-        height="180"
         image={MountainImage}
         alt={name}
       />
-      <CardContent>
+      {/* <CardContent> */}
 
-        <Grid container spacing={2}>
+        {/* <Grid container>
           <Grid item xs={12} sm={6}>
             <Typography variant="body4" color="text.secondary">
               Elevation: {elevation}
@@ -134,48 +127,19 @@ const Mountain = (props) => {
             </Typography>
           </Grid>
         </Grid>
-      </CardContent>
-      <CardActions>
-        
+      </CardContent> */}
+      {/* <CardActions>
         <Button size="small" onClick={handleOnClick}>FIND TRAIL</Button>
-      </CardActions>
+      </CardActions> */}
     </Card>
   );
-
-
-  // return (
-  //   <Card variant="outlined" sx={{maxWidth: 200, margin: 5}}>
-      // <CardContent>
-      //   <Typography variant="h6" component="div">
-      //     {props.name}
-      //   </Typography>
-      //   <Grid container spacing={2}>
-      //     <Grid item xs={12} sm={6}>
-      //       <Typography variant="body2" color="text.secondary">
-      //         Elevation: {props.elevation}
-      //       </Typography>
-      //     </Grid>
-      //     <Grid item xs={12} sm={6}>
-      //       <Typography variant="body2" color="text.secondary">
-      //         Difficulty: {props.difficulty}
-      //       </Typography>
-      //     </Grid>
-      //     <Grid item xs={12} sm={6}>
-      //       <Typography variant="body2" color="text.secondary">
-      //         Summit rating: {props.summitRating}/5
-      //       </Typography>
-      //     </Grid>
-      //   </Grid>
-      // </CardContent>
-  //   </Card>
-  // );
 };
 
 const MountainsDisplay = (props) => {
   if (props.mountains) {
     return (
       props.mountains.map((mtn, index) => (
-        <Grid item key={mtn.mountain_ID}>
+        <Grid item key={mtn.mountain_ID} xs={6}>
           <Mountain
             id={mtn.mountain_ID}
             name={mtn.mountain_name}
@@ -212,12 +176,12 @@ const Mountains = () => {
   }, []);
 
   return (
-      <>
-      <BackgroundVideo />
-      <Grid container spacing={2} justifyContent="center">
+      <div style={{height: "100vh"}}>
+      {/* <BackgroundVideo /> */}
+      <Grid container spacing={0} justifyContent="center">
         <MountainsDisplay mountains={mountains} />
       </Grid>
-      </>
+      </div>
   );
 };
 

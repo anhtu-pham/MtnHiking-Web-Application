@@ -6,12 +6,6 @@ import styles from "../styles/VideoStyles";
 // import { useNavigate } from "react-router-dom";
 
 const Home = () => {
-  // const navigate = useNavigate();
-
-  // const navigateToSignUp = () => {
-  //   // console.log("Hello");
-  //   navigate("/signup");
-  // }
 
   return (
     <div className="home text-dark px-4 py-5 text-center">

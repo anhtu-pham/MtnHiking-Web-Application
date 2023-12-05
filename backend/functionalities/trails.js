@@ -1,11 +1,18 @@
 const crud = require("./crud.js");
 
-const getAssociatedTrails = async (mountainID, orderBy) => {
+const getAssociatedTrails = async (mountainName, orderBy) => {
     try {
+        let mountainID = await crud.select(
+            ["Mountain"],
+            ["mountain_ID"],
+            ["mountain_name = \'" + mountainName + "\'"],
+            null,
+            1
+        );
         let trails = await crud.select(
             ["Trail", "Mountain_Trail"],
             ["Trail.trail_ID", "trail_name", "difficulty", "trail_length", "water_station", "trail_description"],
-            ["Trail.trail_ID = Mountain_Trail.trail_ID", "Mountain_Trail.mountain_ID = " + mountainID],
+            ["Trail.trail_ID = Mountain_Trail.trail_ID", "Mountain_Trail.mountain_ID = " + mountainID[0]],
             orderBy);
         return trails;
     }

@@ -8,8 +8,8 @@ let session = require("express-session");
 let passport = require("passport");
 let LocalStrategy = require("passport-local");
 let cors = require("cors");
+const { emitWarning } = require("process");
 // let ensureLogIn = require("connect-ensure-login").ensureLoggedIn;
-// const proxyMiddleware = require("../frontend/src/setupProxy");
 // const services = require(__dirname + "/database/services.js");
 
 let mountainFunctions = require(__dirname + "/functionalities/mountains.js");
@@ -81,11 +81,11 @@ passport.deserializeUser((user, cb) => {
 
 let examineAuthentication = (req, res, next) => {
     return next();
-    if (req.isAuthenticated()) {
-        return next();
-    } else {
-        res.status(402).json({message: "Unauthorized access"});
-    }
+    // if (req.isAuthenticated()) {
+    //     return next();
+    // } else {
+    //     res.status(401).json({message: "Unauthorized access"});
+    // }
 }
 
 app.get("/", (req, res) => {
@@ -143,29 +143,28 @@ app.route("/login")
         })(req, res);
     });
 
-app.route("/main")
-    .get((req, res) => {
-        if(req.isAuthenticated()){
-        }
-        else {
-            res.redirect("/login");
-        }
-    })
-    .post((req, res) => {
-        if(req.isAuthenticated()){
-        }
-        else {
-            res.redirect("/login");
-        }
-    });
+// app.route("/main")
+//     .get((req, res) => {
+//         if(req.isAuthenticated()){
+//         }
+//         else {
+//             res.redirect("/login");
+//         }
+//     })
+//     .post((req, res) => {
+//         if(req.isAuthenticated()){
+//         }
+//         else {
+//             res.redirect("/login");
+//         }
+//     });
 
 app.route("/mountains")
     .get(examineAuthentication, (req, res) => {
         console.log("GET MOUNTAINS RECEIVED");
             console.log("AUTHENTICATED");
-            mountainFunctions.getMountains(null, null)
+            mountainFunctions.getHighlyRatedMountains()
             .then((response) => {
-                // console.log(response.mountains);
                 res.json({mountains: response});
             })
             .catch((error) => {
@@ -173,6 +172,19 @@ app.route("/mountains")
             });
         console.log("END OF METHOD");
     });
+
+app.route("/mountains/:name")
+    .get(examineAuthentication, (req, res) => {
+        console.log("REACHED TRAILS");
+        trailFunctions.getAssociatedTrails(req.params.name, null)
+        .then((response) => {
+            res.json({trails: response});
+        })
+        .catch((error) => {
+            console.log("Cannot retrieve associated trails");
+        })
+    })
+
 
 app.route("/profile/trips")
     .get((req, res) => {
